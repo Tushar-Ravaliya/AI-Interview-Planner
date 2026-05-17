@@ -1,4 +1,5 @@
 import { UserModel } from "../models/user.model.ts";
+import { BlacklistModel } from "../models/blacklist.model.ts";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -28,6 +29,17 @@ const signUp = async (req: any, res: any) => {
       password: hashedPassword,
     });
     await newUser.save();
+    const token = jwt.sign(
+      { id: newUser._id },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: "1h",
+      },
+    );
+
+    res.cookie("token", token, {
+      httpOnly: true,
+    });
 
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
@@ -53,10 +65,34 @@ const signIn = async (req: any, res: any) => {
       expiresIn: "1h",
     });
 
+    res.cookie("token", token, {
+      httpOnly: true,
+    });
+
     res.status(200).json({ message: "User signed in successfully", token });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 };
 
-export { signUp, signIn };
+const signOut = async (req: any, res: any) => {
+  try {
+    const token = req.cookies.token;
+    await BlacklistModel.create({ token });
+    res.clearCookie("token");
+    res.status(200).json({ message: "User signed out successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getMe = async (req: any, res: any) => {
+  try {
+    const user = await UserModel.findById(req.user.id).select("-password");
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export { signUp, signIn, signOut, getMe };
