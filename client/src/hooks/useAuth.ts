@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import { AuthContext } from "../context/auth.context";
-import { signIn, signUp, signOut, getMe } from "../features/auth/api/auth.api";
+import { AuthContext } from "../context/AuthContext";
+import { signIn, signUp, signOut } from "../features/auth/api/auth.api";
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -10,8 +10,10 @@ export const useAuth = () => {
     try {
       const data = await signIn(email, password);
       setUser(data.user);
+      return data.user;
     } catch (error) {
       console.error("Error signing in:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -25,8 +27,10 @@ export const useAuth = () => {
     try {
       const data = await signUp(username, email, password);
       setUser(data.user);
+      return data.user;
     } catch (error) {
       console.error("Error signing up:", error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -38,6 +42,7 @@ export const useAuth = () => {
       setUser(null);
     } catch (error) {
       console.error("Error signing out:", error);
+      throw error;
     } finally {
       setLoading(false);
     }

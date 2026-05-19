@@ -1,17 +1,26 @@
 import React, { useState } from "react";
 import { Mail, Lock, ArrowRight, BrainCircuit } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import Loader from "../components/Loader.tsx";
 
 export default function SignIn() {
   const { loading, handleSignIn } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handleSignIn(email, password);
+    try {
+      const data = await handleSignIn(email, password);
+      if (data) {
+        navigate("/");
+      }
+    } catch (error) {
+      setError(error as string);
+    }
   };
 
   if (loading) {

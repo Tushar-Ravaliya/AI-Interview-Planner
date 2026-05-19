@@ -1,17 +1,32 @@
 import React, { useState } from "react";
 import { Mail, Lock, User, ArrowRight, BrainCircuit } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { useAuth } from "../../../hooks/useAuth";
+import Loader from "../components/Loader";
 
 export default function SignUp() {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { loading, handleSignUp } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle logic here later
-    console.log("Sign up", { name, email, password });
+    setError("");
+    try {
+      const data = await handleSignUp(username, email, password);
+      if (data) {
+        navigate("/");
+      }
+    } catch (error) {
+      setError(error as string);
+    }
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950">
@@ -27,7 +42,9 @@ export default function SignUp() {
             <div className="p-3 bg-indigo-500/10 rounded-2xl mb-4 border border-indigo-500/20">
               <BrainCircuit className="w-8 h-8 text-indigo-400" />
             </div>
-            <h2 className="text-3xl font-bold text-white tracking-tight">Create Account</h2>
+            <h2 className="text-3xl font-bold text-white tracking-tight">
+              Create Account
+            </h2>
             <p className="text-slate-400 mt-2 text-center">
               Start building your interview skills today.
             </p>
@@ -37,7 +54,7 @@ export default function SignUp() {
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1">
-                  Full Name
+                  Username
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -45,11 +62,10 @@ export default function SignUp() {
                   </div>
                   <input
                     type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                     className="block w-full pl-10 pr-3 py-3 border border-slate-700 bg-slate-800/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
-                    placeholder="John Doe"
+                    placeholder="Enter your username"
                   />
                 </div>
               </div>
@@ -66,7 +82,6 @@ export default function SignUp() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    required
                     className="block w-full pl-10 pr-3 py-3 border border-slate-700 bg-slate-800/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
                     placeholder="you@example.com"
                   />
@@ -85,7 +100,6 @@ export default function SignUp() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    required
                     className="block w-full pl-10 pr-3 py-3 border border-slate-700 bg-slate-800/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
                     placeholder="••••••••"
                   />
@@ -104,7 +118,10 @@ export default function SignUp() {
 
           <p className="mt-8 text-center text-sm text-slate-400">
             Already have an account?{" "}
-            <Link to="/signin" className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors">
+            <Link
+              to="/signin"
+              className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
               Sign in
             </Link>
           </p>
