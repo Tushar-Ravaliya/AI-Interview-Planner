@@ -13,8 +13,8 @@ export const signUp = async (
     });
     return response.data;
   } catch (error) {
-    console.error("Error during sign up:", error);
-    throw error;
+    console.error("Error during sign up:", error.response.data?.message);
+    throw error.response.data?.message;
   }
 };
 
@@ -26,8 +26,8 @@ export const signIn = async (email: string, password: string) => {
     });
     return response.data;
   } catch (error) {
-    console.error("Error during sign in:", error);
-    throw error;
+    console.error("Error during sign in:", error.response.data?.message);
+    throw error.response.data?.message;
   }
 };
 

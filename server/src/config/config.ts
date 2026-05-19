@@ -7,9 +7,13 @@ if (!process.env.MONGODB_URI) {
 if (!process.env.JWT_SECRET) {
   throw new Error("Please provide JWT_SECRET in the .env file");
 }
+if (!process.env.GEMINI_API_KEY) {
+  throw new Error("Please provide GEMINI_API_KEY in the .env file");
+}
 
 export const config = {
   MONGODB_URI: process.env.MONGODB_URI,
   PORT: process.env.PORT || 3000,
   JWT_SECRET: process.env.JWT_SECRET,
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY,
 };
