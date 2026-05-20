@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-const TechnicalQuestionsSchema = new mongoose.Schema(
+const TechnicalQuestionSchema = new mongoose.Schema(
   {
     question: {
       type: String,
       required: true,
     },
-    intension: {
+    intention: {
       type: String,
       required: true,
     },
@@ -20,13 +20,13 @@ const TechnicalQuestionsSchema = new mongoose.Schema(
   },
 );
 
-const behavioralQuestionsSchema = new mongoose.Schema(
+const behavioralQuestionSchema = new mongoose.Schema(
   {
     question: {
       type: String,
       required: true,
     },
-    intension: {
+    intention: {
       type: String,
       required: true,
     },
@@ -93,22 +93,27 @@ const interviewReportSchema = new mongoose.Schema(
     selfDescription: {
       type: String,
     },
+
     matchScore: {
       type: Number,
       min: 0,
       max: 100,
     },
     technicalQuestions: {
-      type: [TechnicalQuestionsSchema],
+      type: [TechnicalQuestionSchema],
     },
     behavioralQuestions: {
-      type: [behavioralQuestionsSchema],
+      type: [behavioralQuestionSchema],
     },
     skillGaps: {
       type: [skillGapSchema],
     },
     preparationPlan: {
       type: [preparationPlanSchema],
+    },
+    title: {
+      type: String,
+      required: true,
     },
   },
   {

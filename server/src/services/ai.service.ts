@@ -2,122 +2,123 @@ import { GoogleGenAI } from "@google/genai";
 import { config } from "../config/config";
 import z from "zod";
 
-import zodToJsonSchema from "zod-to-json-schema";
-
 const genAI = new GoogleGenAI({
   apiKey: config.GEMINI_API_KEY,
 });
 
 const interviewReportSchema = z.object({
-  mathScore: z.number().describe("math score of the candidate out of 100"),
+  matchScore: z
+    .number()
+    .describe(
+      "A score between 0 and 100 indicating how well the candidate's profile matches the job describe",
+    ),
   technicalQuestions: z
     .array(
       z.object({
         question: z
           .string()
-          .describe("technical questions can be asked in interview"),
-        intension: z
+          .describe("The technical question can be asked in the interview"),
+        intention: z
           .string()
-          .describe("intenstion of interviewer to ask that question"),
-        answers: z
+          .describe("The intention of interviewer behind asking this question"),
+        answer: z
           .string()
           .describe(
-            "How to answer to this question, what points to cover while answering",
+            "How to answer this question, what points to cover, what approach to take etc.",
           ),
       }),
     )
-    .describe("technical questions can be asked in interview based on resume"),
+    .describe(
+      "Technical questions that can be asked in the interview along with their intention and how to answer them",
+    ),
   behavioralQuestions: z
     .array(
       z.object({
         question: z
           .string()
-          .describe("behavioral questions can be asked in interview"),
-        intension: z
+          .describe("The technical question can be asked in the interview"),
+        intention: z
           .string()
-          .describe("intenstion of interviewer to ask that question"),
-        answers: z
+          .describe("The intention of interviewer behind asking this question"),
+        answer: z
           .string()
           .describe(
-            "How to answer to this question, what points to cover while answering",
+            "How to answer this question, what points to cover, what approach to take etc.",
           ),
       }),
     )
     .describe(
-      "behavioral questions can be asked in interview based on resume and self description",
+      "Behavioral questions that can be asked in the interview along with their intention and how to answer them",
     ),
   skillGaps: z
     .array(
       z.object({
-        skill: z
-          .string()
-          .describe(
-            "skills which candidate is lacking according to job description",
-          ),
+        skill: z.string().describe("The skill which the candidate is lacking"),
         severity: z
           .enum(["low", "medium", "high"])
-          .describe("severity of the skill gap"),
+          .describe(
+            "The severity of this skill gap, i.e. how important is this skill for the job and how much it can impact the candidate's chances",
+          ),
       }),
     )
     .describe(
-      "skills which candidate is lacking according to job description and resume",
+      "List of skill gaps in the candidate's profile along with their severity",
     ),
   preparationPlan: z
     .array(
       z.object({
-        day: z.number().describe("day of the week"),
+        day: z
+          .number()
+          .describe("The day number in the preparation plan, starting from 1"),
         focus: z
           .string()
           .describe(
-            "what to study and prepare on this day based on skill gaps",
+            "The main focus of this day in the preparation plan, e.g. data structures, system design, mock interviews etc.",
           ),
-        tasks: z.array(z.string()).describe("list of task to be done in a day"),
+        tasks: z
+          .array(z.string())
+          .describe(
+            "List of tasks to be done on this day to follow the preparation plan, e.g. read a specific book or article, solve a set of problems, watch a video etc.",
+          ),
       }),
     )
     .describe(
-      "a day wise preparation plan for the candidate to prepare for the interview based on skill gaps",
+      "A day-wise preparation plan for the candidate to follow in order to prepare for the interview effectively",
+    ),
+  title: z
+    .string()
+    .describe(
+      "The title of the job for which the interview report is generated",
     ),
 });
 
-export const generateInterviewReport = async (
-  resume: string,
-  selfDescrption: string,
-  jobDescription: string,
-) => {
-  const prompt = `
-
-    you are an expert interviewer and career coach. 
-      Given a candidate's resume, self description, and job description, generate a comprehensive interview report.
-      
-      The report should include:
-      1. Technical questions: 10-15 technical questions based on the resume and job description
-      2. Behavioral questions: 5-10 behavioral questions based on the resume and self description
-      3. Skill gaps: 5-10 skill gaps based on the job description and resume
-      4. Preparation plan: Day-wise preparation plan for 7 days
-
-    resume: ${resume},
-    selfDescrption: ${selfDescrption},
-    jobDescription: ${jobDescription}
-
-  `;
+export const generateInterviewReport = async ({
+  resume,
+  selfDescription,
+  jobDescription,
+}: {
+  resume: string;
+  selfDescription: string;
+  jobDescription: string;
+}) => {
+  const prompt = `Generate an interview report for a candidate with the following details:
+                        Resume: ${resume}
+                        Self Description: ${selfDescription}
+                        Job Description: ${jobDescription}
+`;
 
   const response = await genAI.models.generateContent({
-    model: "gemini-2.5-flash-lite",
-    contents: `
-      you are an expert interviewer and career coach. 
-      Given a candidate's resume, self description, and job description, generate a comprehensive interview report.
-      
-      The report should include:
-      1. Technical questions: 10-15 technical questions based on the resume and job description
-      2. Behavioral questions: 5-10 behavioral questions based on the resume and self description
-      3. Skill gaps: 5-10 skill gaps based on the job description and resume
-      4. Preparation plan: Day-wise preparation plan for 7 days
-    `,
+    model: "gemini-3-flash-preview",
+    contents: prompt,
     config: {
       responseMimeType: "application/json",
-      responseSchema: zodToJsonSchema(interviewReportSchema),
+      responseSchema: z.toJSONSchema(interviewReportSchema),
     },
   });
 
-  return response.text;
+  if (!response.text) {
+    throw new Error("AI model returned an empty response");
+  }
+
+  return JSON.parse(response.text);
 };
