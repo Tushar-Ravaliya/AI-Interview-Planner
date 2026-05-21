@@ -33,8 +33,12 @@ const signUp = async (req: any, res: any) => {
       expiresIn: "1h",
     });
 
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
       httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      maxAge: 3600000,
     });
 
     res.status(201).json({
@@ -68,8 +72,12 @@ const signIn = async (req: any, res: any) => {
       expiresIn: "1h",
     });
 
+    const isProduction = process.env.NODE_ENV === "production";
     res.cookie("token", token, {
       httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+      maxAge: 3600000,
     });
 
     res.status(200).json({
@@ -85,7 +93,12 @@ const signOut = async (req: any, res: any) => {
   try {
     const token = req.cookies.token;
     await BlacklistModel.create({ token });
-    res.clearCookie("token");
+    const isProduction = process.env.NODE_ENV === "production";
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
+    });
     res.status(200).json({ message: "User signed out successfully" });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
