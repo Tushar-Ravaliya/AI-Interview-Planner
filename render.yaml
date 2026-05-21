@@ -23,19 +23,3 @@ services:
         sync: false # set manually in Render dashboard
       - key: GEMINI_API_KEY
         sync: false # for @google/genai — set manually
-
-  # ──────────────────────────────────────────
-  # Frontend: React + Vite (Static Site)
-  # Static sites are always free on Render — no plan field needed
-  # ──────────────────────────────────────────
-  - type: static
-    name: my-app-client
-    buildCommand: cd client && bun install && bun run build
-    staticPublishPath: ./client/dist
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html # required for React Router (SPA routing)
-    envVars:
-      - key: VITE_API_URL
-        sync: false # set to your backend URL after first deploy
