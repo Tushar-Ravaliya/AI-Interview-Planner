@@ -14,7 +14,7 @@ services:
     healthCheckPath: /health # add a GET /health route in Express (see notes)
     envVars:
       - key: PORT
-        value: 5000
+        value: 3000
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
@@ -23,3 +23,6 @@ services:
         sync: false # set manually in Render dashboard
       - key: GEMINI_API_KEY
         sync: false # for @google/genai — set manually
+      - key: CLIENT_URL
+        sync: false # your Vercel URL e.g. https://your-app.vercel.app
+
