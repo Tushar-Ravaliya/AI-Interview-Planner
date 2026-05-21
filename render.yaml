@@ -26,13 +26,12 @@ services:
 
   # ──────────────────────────────────────────
   # Frontend: React + Vite (Static Site)
+  # Static sites are always free on Render — no plan field needed
   # ──────────────────────────────────────────
-  - type: web
+  - type: static
     name: my-app-client
-    runtime: static
     buildCommand: cd client && bun install && bun run build
     staticPublishPath: ./client/dist
-    plan: free
     routes:
       - type: rewrite
         source: /*
