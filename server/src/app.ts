@@ -9,10 +9,8 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: [config.CLIENT_URL],
+    origin: config.CLIENT_URL,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
   }),
 );
 app.use(cookies());
