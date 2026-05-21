@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-if (!process.env.MONGODB_URI) {
+if (!process.env.MONGO_URI) {
   throw new Error("Please provide MONGODB_URI in the .env file");
 }
 if (!process.env.JWT_SECRET) {
@@ -15,7 +15,7 @@ if (!process.env.CLIENT_URL) {
 }
 
 export const config = {
-  MONGODB_URI: process.env.MONGODB_URI,
+  MONGODB_URI: process.env.MONGO_URI,
   PORT: process.env.PORT || 3000,
   JWT_SECRET: process.env.JWT_SECRET,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
