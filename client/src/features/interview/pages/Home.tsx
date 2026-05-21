@@ -3,7 +3,6 @@ import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import { generateReport } from "../api/interview.api";
 import {
-  BrainCircuit,
   UploadCloud,
   FileText,
   Sparkles,
@@ -14,9 +13,6 @@ import {
   AlertCircle,
   Loader2,
   CheckCircle2,
-  BookmarkCheck,
-  TrendingUp,
-  Award,
 } from "lucide-react";
 
 export default function Home() {
@@ -145,118 +141,126 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col overflow-hidden">
-      {/* Background blobs */}
-      <div className="absolute top-10 left-10 w-96 h-96 bg-indigo-600/20 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-blob"></div>
-      <div className="absolute top-1/2 right-10 w-96 h-96 bg-fuchsia-600/20 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-blob animation-delay-2000"></div>
-      <div className="absolute -bottom-10 left-1/3 w-96 h-96 bg-blue-600/20 rounded-full mix-blend-screen filter blur-3xl opacity-40 animate-blob animation-delay-4000"></div>
+    <div className="relative min-h-screen bg-noir-950 text-bone flex flex-col overflow-hidden">
+      {/* Noise grain overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50" style={{backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")", backgroundRepeat: "repeat", backgroundSize: "128px"}} />
 
       {/* Header */}
-      <header className="relative z-10 w-full max-w-7xl mx-auto px-6 py-4 flex items-center justify-between border-b border-slate-800/60 bg-slate-950/40 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-indigo-500/10 rounded-xl border border-indigo-500/20">
-            <BrainCircuit className="w-6 h-6 text-indigo-400" />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-white bg-clip-text bg-gradient-to-r from-white via-indigo-200 to-indigo-400">
-            Intervuo AI
-          </span>
-        </div>
-        <div className="flex items-center gap-4">
-          <Link
-            to="/reports"
-            className="text-slate-400 hover:text-white transition-colors text-sm font-semibold mr-2"
-          >
-            My Reports
-          </Link>
-          <div className="hidden sm:flex flex-col items-end text-sm">
-            <span className="text-slate-300 font-medium">
-              {user?.username || "Developer"}
+      <header className="relative z-10 w-full border-b border-noir-800/80">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="font-display text-xl font-bold text-bone tracking-tight">
+              Intervuo
             </span>
-            <span className="text-xs text-slate-500">{user?.email || ""}</span>
+            <span className="text-gold text-xs font-body font-semibold tracking-[0.2em] uppercase mt-0.5">
+              AI
+            </span>
           </div>
-          <button
-            onClick={handleSignOut}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-800 hover:border-slate-700 bg-slate-900/50 hover:bg-slate-800/50 text-slate-400 hover:text-white transition-all text-sm font-medium"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sign Out</span>
-          </button>
+
+          <nav className="hidden md:flex items-center gap-8">
+            <Link
+              to="/"
+              className="text-bone text-sm font-body font-medium relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-gold after:scale-x-100 after:origin-left pb-0.5"
+            >
+              Dashboard
+            </Link>
+            <Link
+              to="/reports"
+              className="text-noir-400 hover:text-bone text-sm font-body font-medium transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-gold after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left pb-0.5"
+            >
+              Reports
+            </Link>
+          </nav>
+
+          <div className="flex items-center gap-5">
+            <div className="hidden sm:flex flex-col items-end">
+              <span className="text-bone text-sm font-body font-medium">
+                {user?.username || "Developer"}
+              </span>
+              <span className="text-noir-500 text-xs font-body">{user?.email || ""}</span>
+            </div>
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-2 text-noir-400 hover:text-bone transition-colors duration-300 text-sm font-body"
+            >
+              <LogOut className="w-4 h-4" />
+              <span className="hidden sm:inline">Sign Out</span>
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="relative z-10 w-full max-w-7xl mx-auto px-6 py-10 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-        {/* Left Column: Hero & Insights */}
-        <section className="lg:col-span-5 space-y-8 lg:sticky lg:top-24">
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>AI-Powered Readiness Engine</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
-              Bridge the Gap <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-fuchsia-400 to-pink-500">
-                To Your Next Role.
+      {/* Main Content */}
+      <main className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-16 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        {/* Left Column: Hero & Context */}
+        <section className="lg:col-span-5 space-y-12 lg:sticky lg:top-24 animate-fade-in-up">
+          {/* Hero */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-px bg-gold" />
+              <span className="text-gold text-xs font-body font-semibold tracking-[0.25em] uppercase">
+                Readiness Engine
               </span>
+            </div>
+            <h1 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-bone leading-[1.1] tracking-tight">
+              Bridge the gap<br />
+              to your <span className="text-gold italic">next role</span>.
             </h1>
-            <p className="text-slate-400 text-base leading-relaxed max-w-lg">
-              Upload your resume and the job specification. Intervuo AI parses
-              the criteria, compares your background, spotlights skill gaps, and
-              prepares custom technical and behavioral interview prep guides.
+            <p className="text-bone-muted text-sm leading-relaxed max-w-md font-body font-light">
+              Upload your resume and the job specification. We parse the
+              criteria, compare your background, spotlight skill gaps, and
+              build a custom preparation guide.
             </p>
           </div>
 
-          {/* Quick Metrics / Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-4 rounded-2xl bg-slate-900/40 border border-slate-800/50">
-              <BookmarkCheck className="w-5 h-5 text-indigo-400 mb-2" />
-              <div className="text-xl font-bold text-white">94%</div>
-              <div className="text-xs text-slate-400">Match Accuracy</div>
+          {/* Data Ribbon — Bloomberg-style */}
+          <div className="flex items-stretch border border-noir-800 rounded-sm divide-x divide-noir-800 animate-fade-in delay-300">
+            <div className="flex-1 py-4 px-5 text-center">
+              <div className="font-display text-2xl font-bold text-bone">94<span className="text-gold text-lg">%</span></div>
+              <div className="text-noir-400 text-[10px] font-body tracking-[0.15em] uppercase mt-1">Match Accuracy</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/40 border border-slate-800/50">
-              <TrendingUp className="w-5 h-5 text-fuchsia-400 mb-2" />
-              <div className="text-xl font-bold text-white">10x</div>
-              <div className="text-xs text-slate-400">Faster Prep Time</div>
+            <div className="flex-1 py-4 px-5 text-center">
+              <div className="font-display text-2xl font-bold text-bone">10<span className="text-gold text-lg">×</span></div>
+              <div className="text-noir-400 text-[10px] font-body tracking-[0.15em] uppercase mt-1">Faster Prep</div>
             </div>
-            <div className="p-4 rounded-2xl bg-slate-900/40 border border-slate-800/50">
-              <Award className="w-5 h-5 text-pink-400 mb-2" />
-              <div className="text-xl font-bold text-white">Instance</div>
-              <div className="text-xs text-slate-400">Custom Reports</div>
+            <div className="flex-1 py-4 px-5 text-center">
+              <div className="font-display text-2xl font-bold text-bone italic">Instant</div>
+              <div className="text-noir-400 text-[10px] font-body tracking-[0.15em] uppercase mt-1">Reports</div>
             </div>
           </div>
 
-          {/* Steps List */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">
+          {/* How It Works */}
+          <div className="space-y-6 animate-fade-in delay-500">
+            <h3 className="text-xs font-body font-semibold text-bone-muted tracking-[0.25em] uppercase">
               How it works
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-5">
               {[
                 {
-                  step: "1",
+                  step: "01",
                   title: "Upload your PDF resume",
-                  desc: "We parse your actual projects, tech stack, and experience.",
+                  desc: "We parse your projects, tech stack, and experience.",
                 },
                 {
-                  step: "2",
-                  title: "Paste the Job Description",
-                  desc: "Provide details of the position you are interviewing for.",
+                  step: "02",
+                  title: "Paste the job description",
+                  desc: "Provide the role requirements you're targeting.",
                 },
                 {
-                  step: "3",
-                  title: "Get Your Readiness Package",
-                  desc: "Unlock score, questions, answers, and study roadmaps instantly.",
+                  step: "03",
+                  title: "Get your readiness package",
+                  desc: "Score, questions, answers, and study roadmaps — instantly.",
                 },
               ].map((s) => (
-                <div key={s.step} className="flex gap-4">
-                  <div className="w-6 h-6 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-xs font-bold text-indigo-400 shrink-0">
+                <div key={s.step} className="flex gap-5 group">
+                  <span className="font-display text-3xl font-bold text-noir-700 group-hover:text-gold transition-colors duration-500 leading-none -mt-1 shrink-0">
                     {s.step}
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-semibold text-slate-200">
+                  </span>
+                  <div className="border-l border-noir-800 pl-5">
+                    <h4 className="text-sm font-body font-semibold text-bone">
                       {s.title}
                     </h4>
-                    <p className="text-xs text-slate-400">{s.desc}</p>
+                    <p className="text-xs text-noir-400 font-body font-light mt-0.5">{s.desc}</p>
                   </div>
                 </div>
               ))}
@@ -264,25 +268,28 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Right Column: Form Card */}
-        <section className="lg:col-span-7">
-          <div className="bg-slate-900/40 backdrop-blur-xl border border-slate-800/60 rounded-3xl p-8 shadow-2xl relative">
-            <h2 className="text-2xl font-bold text-white mb-6">
+        {/* Right Column: Form */}
+        <section className="lg:col-span-7 animate-fade-in-up delay-200">
+          <div className="bg-noir-900 border border-noir-800 rounded-sm p-8 lg:p-10 relative">
+            {/* Gold accent top border */}
+            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-gold via-gold/50 to-transparent" />
+
+            <h2 className="font-display text-2xl font-bold text-bone mb-8">
               Create Preparation Plan
             </h2>
 
             {error && (
-              <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-200 text-sm flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-                <span>{error}</span>
+              <div className="mb-6 py-3 px-4 bg-danger/10 border-l-2 border-danger text-danger-soft text-sm flex items-start gap-3">
+                <AlertCircle className="w-4 h-4 text-danger shrink-0 mt-0.5" />
+                <span className="font-body">{error}</span>
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Drag and Drop Resume */}
+            <form onSubmit={handleSubmit} className="space-y-8">
+              {/* Resume Upload */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-300">
-                  Upload Resume <span className="text-indigo-400">*</span>
+                <label className="block text-xs font-body font-medium text-bone-muted tracking-wide uppercase">
+                  Resume <span className="text-gold">*</span>
                 </label>
 
                 {!resumeFile ? (
@@ -292,10 +299,10 @@ export default function Home() {
                     onDragLeave={handleDrag}
                     onDrop={handleDrop}
                     onClick={() => fileInputRef.current?.click()}
-                    className={`border-2 border-dashed rounded-2xl p-8 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all ${
+                    className={`border border-dashed rounded-sm p-10 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 ${
                       isDragActive
-                        ? "border-indigo-500 bg-indigo-500/5 shadow-inner"
-                        : "border-slate-800 hover:border-slate-700 bg-slate-950/20 hover:bg-slate-950/40"
+                        ? "border-gold bg-gold/5"
+                        : "border-noir-700 hover:border-noir-500 bg-noir-950/50"
                     }`}
                   >
                     <input
@@ -305,30 +312,26 @@ export default function Home() {
                       onChange={handleFileChange}
                       className="hidden"
                     />
-                    <div className="p-4 bg-slate-950/50 rounded-2xl border border-slate-800/80 group-hover:scale-110 transition-transform">
-                      <UploadCloud className="w-8 h-8 text-slate-400" />
-                    </div>
+                    <UploadCloud className="w-7 h-7 text-noir-500" />
                     <div className="text-center">
-                      <p className="text-sm font-semibold text-slate-200">
+                      <p className="text-sm font-body font-medium text-bone">
                         Drag & drop your resume, or{" "}
-                        <span className="text-indigo-400">browse</span>
+                        <span className="text-gold">browse</span>
                       </p>
-                      <p className="text-xs text-slate-500 mt-1">
-                        Supports PDF files only
+                      <p className="text-xs text-noir-500 font-body mt-1">
+                        PDF files only
                       </p>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-4 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="p-2.5 bg-indigo-500/10 rounded-xl border border-indigo-500/25">
-                        <FileText className="w-6 h-6 text-indigo-400" />
-                      </div>
+                  <div className="py-4 px-5 rounded-sm bg-noir-850 border border-noir-700 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4 min-w-0">
+                      <FileText className="w-5 h-5 text-gold shrink-0" />
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-slate-200 truncate">
+                        <p className="text-sm font-body font-medium text-bone truncate">
                           {resumeFile.name}
                         </p>
-                        <p className="text-xs text-slate-500 mt-0.5">
+                        <p className="text-xs text-noir-500 font-body mt-0.5">
                           {formatFileSize(resumeFile.size)}
                         </p>
                       </div>
@@ -336,7 +339,7 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={removeFile}
-                      className="p-1.5 hover:bg-slate-800 rounded-lg text-slate-400 hover:text-white transition-all"
+                      className="p-1.5 hover:bg-noir-700 rounded-sm text-noir-400 hover:text-bone transition-all duration-200"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -344,54 +347,53 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Target Job Description */}
+              {/* Job Description */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-slate-300">
-                  Target Job Description{" "}
-                  <span className="text-indigo-400">*</span>
+                <label className="block text-xs font-body font-medium text-bone-muted tracking-wide uppercase">
+                  Target Job Description <span className="text-gold">*</span>
                 </label>
                 <div className="relative group">
-                  <div className="absolute top-3.5 left-3 flex items-start pointer-events-none">
-                    <Briefcase className="h-5 w-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                  <div className="absolute top-3.5 left-0 flex items-start pointer-events-none">
+                    <Briefcase className="h-4 w-4 text-noir-500 group-focus-within:text-gold transition-colors duration-300" />
                   </div>
                   <textarea
                     rows={6}
                     value={jobDescription}
                     onChange={(e) => setJobDescription(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-3 border border-slate-800 bg-slate-950/40 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-sans text-sm resize-y"
+                    className="block w-full pl-7 pr-0 py-3 border-0 border-b border-noir-700 bg-transparent text-bone placeholder-noir-500 focus:outline-none focus:border-gold transition-colors duration-300 font-body text-sm resize-y"
                     placeholder="Paste the job description, key requirements, roles/responsibilities here..."
                   />
                 </div>
               </div>
 
-              {/* Self Description / Highlights */}
+              {/* Self Description */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-sm font-medium text-slate-300">
-                    Self Description / Context
+                  <label className="block text-xs font-body font-medium text-bone-muted tracking-wide uppercase">
+                    Self Description
                   </label>
-                  <span className="text-xs text-slate-500">Optional</span>
+                  <span className="text-xs text-noir-500 font-body italic">Optional</span>
                 </div>
                 <div className="relative group">
-                  <div className="absolute top-3.5 left-3 flex items-start pointer-events-none">
-                    <User className="h-5 w-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                  <div className="absolute top-3.5 left-0 flex items-start pointer-events-none">
+                    <User className="h-4 w-4 text-noir-500 group-focus-within:text-gold transition-colors duration-300" />
                   </div>
                   <textarea
                     rows={3}
                     value={selfDescription}
                     onChange={(e) => setSelfDescription(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-3 border border-slate-800 bg-slate-950/40 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all font-sans text-sm resize-y"
-                    placeholder="Highlight specific career achievements, custom skills, or what you want this preparation to focus on..."
+                    className="block w-full pl-7 pr-0 py-3 border-0 border-b border-noir-700 bg-transparent text-bone placeholder-noir-500 focus:outline-none focus:border-gold transition-colors duration-300 font-body text-sm resize-y"
+                    placeholder="Highlight specific career achievements, skills, or focus areas..."
                   />
                 </div>
               </div>
 
-              {/* Submit Button */}
+              {/* Submit */}
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-indigo-500 to-fuchsia-500 hover:from-indigo-600 hover:to-fuchsia-600 text-white font-semibold py-3.5 px-4 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-indigo-500/20 cursor-pointer"
+                className="w-full flex items-center justify-center gap-3 bg-gold hover:bg-gold-light text-noir-950 font-body font-semibold py-4 px-4 rounded-sm transition-all duration-300 active:scale-[0.98] text-sm tracking-wide uppercase"
               >
-                <Sparkles className="w-5 h-5 text-indigo-200" />
+                <Sparkles className="w-4 h-4" />
                 <span>Generate Preparation Plan</span>
               </button>
             </form>
@@ -401,31 +403,28 @@ export default function Home() {
 
       {/* Loading Overlay */}
       {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-noir-950/95 backdrop-blur-sm">
           <div className="max-w-md w-full px-6 flex flex-col items-center text-center">
-            {/* Spinning Loader */}
-            <div className="relative flex items-center justify-center mb-8">
-              <div className="w-20 h-20 rounded-full border border-indigo-500/20 absolute"></div>
-              <div className="w-20 h-20 rounded-full border-t-2 border-indigo-500 animate-spin absolute"></div>
-              <div className="w-12 h-12 bg-indigo-500/10 rounded-2xl border border-indigo-500/20 flex items-center justify-center">
-                <BrainCircuit className="w-6 h-6 text-indigo-400" />
-              </div>
+            {/* Pulsing gold dots */}
+            <div className="flex items-center gap-2 mb-8">
+              <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot" />
+              <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot delay-200" />
+              <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot delay-400" />
             </div>
 
-            {/* Title */}
-            <h3 className="text-xl font-bold text-white mb-2">
+            <h3 className="font-display text-2xl font-bold text-bone mb-2">
               Analyzing Profile
             </h3>
 
-            {/* Staggered Status steps */}
-            <div className="h-10 flex items-center justify-center mb-6">
-              <p className="text-indigo-200 text-sm font-medium animate-pulse">
+            {/* Current step */}
+            <div className="h-10 flex items-center justify-center mb-8">
+              <p className="text-gold text-sm font-body font-medium animate-pulse">
                 {loadingSteps[loadingStep]}
               </p>
             </div>
 
-            {/* Visual Steps Checkboxes */}
-            <div className="w-full bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-left space-y-2.5">
+            {/* Step list */}
+            <div className="w-full bg-noir-900 border border-noir-800 rounded-sm p-5 text-left space-y-3">
               {loadingSteps.map((stepMsg, idx) => {
                 const isCompleted = idx < loadingStep;
                 const isActive = idx === loadingStep;
@@ -435,19 +434,19 @@ export default function Home() {
                     className="flex items-center gap-3 transition-opacity duration-300"
                   >
                     {isCompleted ? (
-                      <CheckCircle2 className="w-4 h-4 text-green-400 shrink-0" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-success shrink-0" />
                     ) : isActive ? (
-                      <Loader2 className="w-4 h-4 text-indigo-400 animate-spin shrink-0" />
+                      <Loader2 className="w-3.5 h-3.5 text-gold animate-spin shrink-0" />
                     ) : (
-                      <div className="w-4 h-4 rounded-full border border-slate-800 shrink-0" />
+                      <div className="w-3.5 h-3.5 rounded-full border border-noir-700 shrink-0" />
                     )}
                     <span
-                      className={`text-xs ${
+                      className={`text-xs font-body ${
                         isCompleted
-                          ? "text-slate-400 line-through"
+                          ? "text-noir-500 line-through"
                           : isActive
-                            ? "text-indigo-300 font-semibold"
-                            : "text-slate-600"
+                            ? "text-gold font-medium"
+                            : "text-noir-600"
                       }`}
                     >
                       {stepMsg}

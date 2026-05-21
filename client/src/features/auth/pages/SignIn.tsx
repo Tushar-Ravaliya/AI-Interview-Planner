@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Mail, Lock, ArrowRight, BrainCircuit } from "lucide-react";
+import { Mail, Lock, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import Loader from "../components/Loader.tsx";
@@ -28,73 +28,105 @@ export default function SignIn() {
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950">
-      {/* Dynamic Background Elements */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/30 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob"></div>
-      <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-fuchsia-600/30 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
-      <div className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-blue-600/30 rounded-full mix-blend-screen filter blur-3xl opacity-50 animate-blob animation-delay-4000"></div>
+    <div className="relative min-h-screen flex bg-noir-950 overflow-hidden">
+      {/* Noise grain overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50" style={{backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")", backgroundRepeat: "repeat", backgroundSize: "128px"}} />
 
-      {/* Sign In Card */}
-      <div className="relative z-10 w-full max-w-md px-6 py-12">
-        <div className="bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 shadow-2xl">
-          <div className="flex flex-col items-center mb-8">
-            <div className="p-3 bg-indigo-500/10 rounded-2xl mb-4 border border-indigo-500/20">
-              <BrainCircuit className="w-8 h-8 text-indigo-400" />
-            </div>
-            <h2 className="text-3xl font-bold text-white tracking-tight">
-              Welcome Back
+      {/* Left Panel — Typographic Hero */}
+      <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-12 xl:p-16 bg-noir-900 border-r border-noir-700/50">
+        {/* Gold accent line */}
+        <div className="absolute top-0 left-0 w-px h-full bg-gradient-to-b from-transparent via-gold/30 to-transparent" />
+
+        <div className="relative z-10">
+          <span className="text-gold text-xs font-body font-semibold tracking-[0.3em] uppercase">
+            Intervuo
+          </span>
+        </div>
+
+        <div className="relative z-10 space-y-8 animate-fade-in-up">
+          <h1 className="font-display text-6xl xl:text-7xl font-bold text-bone leading-[1.1] tracking-tight">
+            Prepare.<br />
+            <span className="text-gold italic">Perform.</span><br />
+            Prevail.
+          </h1>
+          <div className="w-16 h-px bg-gold" />
+          <p className="text-bone-muted text-base leading-relaxed max-w-sm font-body font-light">
+            AI-powered interview preparation that analyzes your profile against
+            target roles and builds a custom readiness package.
+          </p>
+        </div>
+
+        <div className="relative z-10 text-noir-500 text-xs font-body tracking-wide">
+          © {new Date().getFullYear()} Intervuo AI
+        </div>
+      </div>
+
+      {/* Right Panel — Sign In Form */}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12">
+        <div className="w-full max-w-sm animate-fade-in-up delay-200">
+          {/* Mobile brand */}
+          <div className="lg:hidden mb-12">
+            <span className="text-gold text-xs font-body font-semibold tracking-[0.3em] uppercase">
+              Intervuo
+            </span>
+          </div>
+
+          <div className="mb-10">
+            <h2 className="font-display text-3xl font-bold text-bone tracking-tight">
+              Welcome back
             </h2>
-            <p className="text-slate-400 mt-2 text-center">
-              Continue your journey to master your next interview.
+            <p className="text-bone-muted mt-3 text-sm font-light">
+              Sign in to continue your interview preparation.
             </p>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
             {error && (
-              <div className="p-3 bg-red-500/10 border border-red-500/25 text-red-300 rounded-xl text-xs text-center">
+              <div className="py-3 px-4 bg-danger/10 border-l-2 border-danger text-danger-soft text-xs">
                 {error}
               </div>
             )}
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">
-                  Email Address
+
+            <div className="space-y-6">
+              <div className="group">
+                <label className="block text-xs font-body font-medium text-bone-muted mb-2 tracking-wide uppercase">
+                  Email
                 </label>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Mail className="h-5 w-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
+                    <Mail className="h-4 w-4 text-noir-500 group-focus-within:text-gold transition-colors duration-300" />
                   </div>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-3 border border-slate-700 bg-slate-800/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
+                    className="block w-full pl-7 pr-0 py-3 border-0 border-b border-noir-700 bg-transparent text-bone placeholder-noir-500 focus:outline-none focus:border-gold transition-colors duration-300 text-sm font-body"
                     placeholder="you@example.com"
                   />
                 </div>
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-sm font-medium text-slate-300">
+              <div className="group">
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-xs font-body font-medium text-bone-muted tracking-wide uppercase">
                     Password
                   </label>
                   <a
                     href="#"
-                    className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
+                    className="text-xs text-noir-400 hover:text-gold transition-colors duration-300"
                   >
-                    Forgot password?
+                    Forgot?
                   </a>
                 </div>
-                <div className="relative group">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
+                    <Lock className="h-4 w-4 text-noir-500 group-focus-within:text-gold transition-colors duration-300" />
                   </div>
                   <input
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-10 pr-3 py-3 border border-slate-700 bg-slate-800/50 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all"
+                    className="block w-full pl-7 pr-0 py-3 border-0 border-b border-noir-700 bg-transparent text-bone placeholder-noir-500 focus:outline-none focus:border-gold transition-colors duration-300 text-sm font-body"
                     placeholder="••••••••"
                   />
                 </div>
@@ -103,20 +135,20 @@ export default function SignIn() {
 
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-3 px-4 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-indigo-500/25"
+              className="w-full flex items-center justify-center gap-3 bg-gold hover:bg-gold-light text-noir-950 font-body font-semibold py-3.5 px-4 rounded-sm transition-all duration-300 active:scale-[0.98] text-sm tracking-wide uppercase"
             >
               Sign In
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-slate-400">
+          <p className="mt-10 text-center text-sm text-noir-400">
             Don't have an account?{" "}
             <Link
               to="/signup"
-              className="font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+              className="text-gold hover:text-gold-light transition-colors duration-300 font-medium"
             >
-              Sign up
+              Create one
             </Link>
           </p>
         </div>
