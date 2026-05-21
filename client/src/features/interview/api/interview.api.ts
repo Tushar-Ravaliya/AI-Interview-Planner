@@ -56,3 +56,23 @@ export const getReportById = async (id: string): Promise<InterviewReport> => {
     throw error.response?.data?.message || "Failed to fetch report details";
   }
 };
+
+export const getUserReports = async (): Promise<InterviewReport[]> => {
+  try {
+    const response = await api.get(`/v1/interview`);
+    return response.data.data;
+  } catch (error: any) {
+    console.error("Error fetching user reports:", error);
+    throw error.response?.data?.message || "Failed to fetch user reports";
+  }
+};
+
+export const deleteReport = async (id: string): Promise<any> => {
+  try {
+    const response = await api.delete(`/v1/interview/${id}`);
+    return response.data;
+  } catch (error: any) {
+    console.error("Error deleting report:", error);
+    throw error.response?.data?.message || "Failed to delete report";
+  }
+};

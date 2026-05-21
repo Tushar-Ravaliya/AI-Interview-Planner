@@ -6,10 +6,10 @@ import { PDFParse } from "pdf-parse";
 const generateInterviewReportController = async (
   req: Request,
   res: Response,
-) => {
-  // if (!req.file) {
-  //   return res.status(400).json({ success: false, message: "Resume file is required" });
-  // }
+): Promise<any> => {
+  if (!req.file) {
+    return res.status(400).json({ success: false, message: "Resume file is required" });
+  }
 
   const resumeContent = await new PDFParse(
     Uint8Array.from(req.file.buffer),
@@ -67,4 +67,55 @@ const getInterviewReportByIdController = async (
   }
 };
 
-export { generateInterviewReportController, getInterviewReportByIdController };
+const getAllInterviewReportsController = async (
+  req: Request,
+  res: Response,
+): Promise<any> => {
+  try {
+    const reports = await interviewReportModel
+      .find({ userId: req.user.id })
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      data: reports,
+    });
+  } catch (error) {
+    console.error("Error fetching all interview reports:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+const deleteInterviewReportController = async (
+  req: Request,
+  res: Response,
+): Promise<any> => {
+  try {
+    const { id } = req.params;
+    const report = await interviewReportModel.findById(id);
+    if (!report) {
+      return res.status(404).json({ success: false, message: "Interview report not found" });
+    }
+
+    if (report.userId?.toString() !== req.user.id) {
+      return res.status(403).json({ success: false, message: "Unauthorized access to report" });
+    }
+
+    await interviewReportModel.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Interview report deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting interview report:", error);
+    return res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export { 
+  generateInterviewReportController, 
+  getInterviewReportByIdController,
+  getAllInterviewReportsController,
+  deleteInterviewReportController
+};

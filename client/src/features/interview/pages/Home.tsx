@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import { generateReport } from "../api/interview.api";
 import {
@@ -162,6 +162,12 @@ export default function Home() {
           </span>
         </div>
         <div className="flex items-center gap-4">
+          <Link
+            to="/reports"
+            className="text-slate-400 hover:text-white transition-colors text-sm font-semibold mr-2"
+          >
+            My Reports
+          </Link>
           <div className="hidden sm:flex flex-col items-end text-sm">
             <span className="text-slate-300 font-medium">
               {user?.username || "Developer"}

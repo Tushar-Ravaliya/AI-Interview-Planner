@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams, useNavigate, Link } from "react-router";
 import { getReportById } from "../api/interview.api";
 import type { InterviewReport } from "../api/interview.api";
 import { 
@@ -143,6 +143,12 @@ export default function Interview() {
           <span>Dashboard</span>
         </button>
         <div className="flex items-center gap-3">
+          <Link
+            to="/reports"
+            className="text-slate-400 hover:text-white transition-colors text-sm font-semibold mr-4"
+          >
+            My Reports
+          </Link>
           <div className="p-2 bg-indigo-500/10 rounded-xl border border-indigo-500/20">
             <BrainCircuit className="w-5 h-5 text-indigo-400" />
           </div>

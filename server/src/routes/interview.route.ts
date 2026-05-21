@@ -4,6 +4,8 @@ import { upload } from "../middleware/multer.middleware";
 import {
   generateInterviewReportController,
   getInterviewReportByIdController,
+  getAllInterviewReportsController,
+  deleteInterviewReportController,
 } from "../controllers/interview.controller";
 const router = Router();
 
@@ -14,10 +16,10 @@ router.post(
   generateInterviewReportController,
 );
 
+router.get("/", authMiddleware, getAllInterviewReportsController);
+
 router.get("/:id", authMiddleware, getInterviewReportByIdController);
 
-router.post("/submit/:id", authMiddleware, (req, res) => {});
-
-router.delete("/:id", authMiddleware, (req, res) => {});
+router.delete("/:id", authMiddleware, deleteInterviewReportController);
 
 export default router;
