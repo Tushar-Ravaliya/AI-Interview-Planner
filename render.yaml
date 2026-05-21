@@ -1,0 +1,42 @@
+# render.yaml — place this in your project ROOT
+# Render will auto-detect and set up your services
+
+services:
+  # ──────────────────────────────────────────
+  # Backend: Bun + Express (Docker)
+  # ──────────────────────────────────────────
+  - type: web
+    name: my-app-server
+    runtime: docker
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: ./server
+    plan: free
+    healthCheckPath: /health # add a GET /health route in Express (see notes)
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false # set manually in Render dashboard
+      - key: JWT_SECRET
+        sync: false # set manually in Render dashboard
+      - key: GEMINI_API_KEY
+        sync: false # for @google/genai — set manually
+
+  # ──────────────────────────────────────────
+  # Frontend: React + Vite (Static Site)
+  # ──────────────────────────────────────────
+  - type: web
+    name: my-app-client
+    runtime: static
+    buildCommand: cd client && bun install && bun run build
+    staticPublishPath: ./client/dist
+    plan: free
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html # required for React Router (SPA routing)
+    envVars:
+      - key: VITE_API_URL
+        sync: false # set to your backend URL after first deploy
