@@ -1,7 +1,10 @@
 import { Router } from "express";
 import authMiddleware from "../middleware/auth.middleware";
 import { upload } from "../middleware/multer.middleware";
-import { generateInterviewReportController } from "../controllers/interview.controller";
+import {
+  generateInterviewReportController,
+  getInterviewReportByIdController,
+} from "../controllers/interview.controller";
 const router = Router();
 
 router.post(
@@ -11,7 +14,7 @@ router.post(
   generateInterviewReportController,
 );
 
-router.get("/:id", authMiddleware, (req, res) => {});
+router.get("/:id", authMiddleware, getInterviewReportByIdController);
 
 router.post("/submit/:id", authMiddleware, (req, res) => {});
 

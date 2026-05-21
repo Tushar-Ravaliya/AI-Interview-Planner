@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router";
 import SignIn from "./features/auth/pages/SignIn.tsx";
 import SignUp from "./features/auth/pages/SignUp.tsx";
-import Home from "./features/auth/pages/Home.tsx";
+import Home from "./features/interview/pages/Home.tsx";
+import Interview from "./features/interview/pages/Interview.tsx";
 import Protected from "./features/auth/components/Protected.tsx";
-import Demo from "./features/auth/pages/Demo.tsx";
 
 function App() {
   return (
@@ -13,7 +13,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route element={<Protected />}>
           <Route path="/" element={<Home />} />
-          <Route path="/demo" element={<Demo />} />
+          <Route path="/interview/:id" element={<Interview />} />
         </Route>
       </Routes>
     </>
