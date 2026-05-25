@@ -2,18 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router";
 import { useAuth } from "../../../hooks/useAuth";
 import { generateReport } from "../api/interview.api";
-import {
-  UploadCloud,
-  FileText,
-  Sparkles,
-  LogOut,
-  Briefcase,
-  User,
-  X,
-  AlertCircle,
-  Loader2,
-  CheckCircle2,
-} from "lucide-react";
 
 export default function Home() {
   const { user, handleSignOut } = useAuth();
@@ -141,97 +129,64 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-noir-950 text-bone flex flex-col overflow-hidden">
-      {/* Noise grain overlay */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50" style={{backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")", backgroundRepeat: "repeat", backgroundSize: "128px"}} />
-
+    <div className="min-h-screen bg-parchment text-ink flex flex-col">
       {/* Header */}
-      <header className="relative z-10 w-full border-b border-noir-800/80">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="font-display text-xl font-bold text-bone tracking-tight">
-              Intervuo
-            </span>
-            <span className="text-gold text-xs font-body font-semibold tracking-[0.2em] uppercase mt-0.5">
-              AI
-            </span>
+      <header className="w-full border-b border-border">
+        <div className="max-w-6xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <h1 className="font-serif text-xl text-ink">Intervuo</h1>
+            <nav className="hidden md:flex items-center gap-6">
+              <Link
+                to="/"
+                className="text-ink text-sm font-sans font-medium border-b border-terra pb-0.5"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/reports"
+                className="text-ink-muted hover:text-ink text-sm font-sans font-medium transition-colors duration-300 pb-0.5"
+              >
+                Reports
+              </Link>
+            </nav>
           </div>
 
-          <nav className="hidden md:flex items-center gap-8">
-            <Link
-              to="/"
-              className="text-bone text-sm font-body font-medium relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-gold after:scale-x-100 after:origin-left pb-0.5"
-            >
-              Dashboard
-            </Link>
-            <Link
-              to="/reports"
-              className="text-noir-400 hover:text-bone text-sm font-body font-medium transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-gold after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left pb-0.5"
-            >
-              Reports
-            </Link>
-          </nav>
-
           <div className="flex items-center gap-5">
-            <div className="hidden sm:flex flex-col items-end">
-              <span className="text-bone text-sm font-body font-medium">
-                {user?.username || "Developer"}
-              </span>
-              <span className="text-noir-500 text-xs font-body">{user?.email || ""}</span>
-            </div>
+            <span className="hidden sm:block text-sm text-ink-muted font-sans">
+              {user?.username || "Developer"}
+            </span>
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-2 text-noir-400 hover:text-bone transition-colors duration-300 text-sm font-body"
+              className="text-ink-muted hover:text-ink transition-colors duration-300 text-sm font-sans"
             >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Sign Out</span>
+              Sign Out
             </button>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-10 py-12 lg:py-16 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-        {/* Left Column: Hero & Context */}
-        <section className="lg:col-span-5 space-y-12 lg:sticky lg:top-24 animate-fade-in-up">
-          {/* Hero */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-px bg-gold" />
-              <span className="text-gold text-xs font-body font-semibold tracking-[0.25em] uppercase">
-                Readiness Engine
-              </span>
-            </div>
-            <h1 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-bone leading-[1.1] tracking-tight">
+      <main className="w-full max-w-6xl mx-auto px-6 lg:px-10 py-12 lg:py-16 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        {/* Left Column: Editorial */}
+        <section className="lg:col-span-5 space-y-12 lg:sticky lg:top-24 animate-enter-up">
+          <div className="space-y-5">
+            <p className="text-terra text-xs font-sans font-medium tracking-[0.2em] uppercase">
+              Readiness Engine
+            </p>
+            <h2 className="font-serif text-4xl md:text-5xl text-ink leading-[1.15]">
               Bridge the gap<br />
-              to your <span className="text-gold italic">next role</span>.
-            </h1>
-            <p className="text-bone-muted text-sm leading-relaxed max-w-md font-body font-light">
+              to your <span className="text-terra italic">next role</span>.
+            </h2>
+            <p className="text-ink-muted text-sm leading-relaxed max-w-sm font-sans font-light">
               Upload your resume and the job specification. We parse the
               criteria, compare your background, spotlight skill gaps, and
               build a custom preparation guide.
             </p>
           </div>
 
-          {/* Data Ribbon — Bloomberg-style */}
-          <div className="flex items-stretch border border-noir-800 rounded-sm divide-x divide-noir-800 animate-fade-in delay-300">
-            <div className="flex-1 py-4 px-5 text-center">
-              <div className="font-display text-2xl font-bold text-bone">94<span className="text-gold text-lg">%</span></div>
-              <div className="text-noir-400 text-[10px] font-body tracking-[0.15em] uppercase mt-1">Match Accuracy</div>
-            </div>
-            <div className="flex-1 py-4 px-5 text-center">
-              <div className="font-display text-2xl font-bold text-bone">10<span className="text-gold text-lg">×</span></div>
-              <div className="text-noir-400 text-[10px] font-body tracking-[0.15em] uppercase mt-1">Faster Prep</div>
-            </div>
-            <div className="flex-1 py-4 px-5 text-center">
-              <div className="font-display text-2xl font-bold text-bone italic">Instant</div>
-              <div className="text-noir-400 text-[10px] font-body tracking-[0.15em] uppercase mt-1">Reports</div>
-            </div>
-          </div>
-
           {/* How It Works */}
-          <div className="space-y-6 animate-fade-in delay-500">
-            <h3 className="text-xs font-body font-semibold text-bone-muted tracking-[0.25em] uppercase">
+          <div className="space-y-6 animate-enter delay-300">
+            <h3 className="text-xs font-sans font-medium text-ink-muted tracking-[0.2em] uppercase">
               How it works
             </h3>
             <div className="space-y-5">
@@ -253,14 +208,14 @@ export default function Home() {
                 },
               ].map((s) => (
                 <div key={s.step} className="flex gap-5 group">
-                  <span className="font-display text-3xl font-bold text-noir-700 group-hover:text-gold transition-colors duration-500 leading-none -mt-1 shrink-0">
+                  <span className="font-serif text-2xl text-ink-ghost group-hover:text-terra transition-colors duration-400 leading-none shrink-0">
                     {s.step}
                   </span>
-                  <div className="border-l border-noir-800 pl-5">
-                    <h4 className="text-sm font-body font-semibold text-bone">
+                  <div className="border-l border-border pl-5">
+                    <h4 className="text-sm font-sans font-medium text-ink">
                       {s.title}
                     </h4>
-                    <p className="text-xs text-noir-400 font-body font-light mt-0.5">{s.desc}</p>
+                    <p className="text-xs text-ink-muted font-sans font-light mt-0.5">{s.desc}</p>
                   </div>
                 </div>
               ))}
@@ -269,27 +224,23 @@ export default function Home() {
         </section>
 
         {/* Right Column: Form */}
-        <section className="lg:col-span-7 animate-fade-in-up delay-200">
-          <div className="bg-noir-900 border border-noir-800 rounded-sm p-8 lg:p-10 relative">
-            {/* Gold accent top border */}
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-gold via-gold/50 to-transparent" />
-
-            <h2 className="font-display text-2xl font-bold text-bone mb-8">
+        <section className="lg:col-span-7 animate-enter-up delay-200">
+          <div className="bg-surface border border-border rounded-lg p-8 lg:p-10">
+            <h2 className="font-serif text-2xl text-ink mb-8">
               Create Preparation Plan
             </h2>
 
             {error && (
-              <div className="mb-6 py-3 px-4 bg-danger/10 border-l-2 border-danger text-danger-soft text-sm flex items-start gap-3">
-                <AlertCircle className="w-4 h-4 text-danger shrink-0 mt-0.5" />
-                <span className="font-body">{error}</span>
+              <div className="mb-6 py-2.5 px-4 bg-warm-red-ghost border-l-2 border-warm-red text-warm-red text-sm flex items-start gap-3">
+                <span className="font-sans text-xs">{error}</span>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-8">
               {/* Resume Upload */}
               <div className="space-y-2">
-                <label className="block text-xs font-body font-medium text-bone-muted tracking-wide uppercase">
-                  Resume <span className="text-gold">*</span>
+                <label className="block text-xs font-sans font-medium text-ink-muted tracking-wide uppercase">
+                  Resume <span className="text-terra">*</span>
                 </label>
 
                 {!resumeFile ? (
@@ -299,10 +250,10 @@ export default function Home() {
                     onDragLeave={handleDrag}
                     onDrop={handleDrop}
                     onClick={() => fileInputRef.current?.click()}
-                    className={`border border-dashed rounded-sm p-10 flex flex-col items-center justify-center gap-4 cursor-pointer transition-all duration-300 ${
+                    className={`border border-dashed rounded-md p-10 flex flex-col items-center justify-center gap-3 cursor-pointer transition-all duration-300 ${
                       isDragActive
-                        ? "border-gold bg-gold/5"
-                        : "border-noir-700 hover:border-noir-500 bg-noir-950/50"
+                        ? "border-terra bg-terra-ghost"
+                        : "border-border-hover hover:border-ink-ghost bg-parchment-dim/50"
                     }`}
                   >
                     <input
@@ -312,26 +263,30 @@ export default function Home() {
                       onChange={handleFileChange}
                       className="hidden"
                     />
-                    <UploadCloud className="w-7 h-7 text-noir-500" />
+                    <svg className="w-6 h-6 text-ink-faint" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.338-2.32 3 3 0 013.898 3.345A3.75 3.75 0 0118 19.5H6.75z" />
+                    </svg>
                     <div className="text-center">
-                      <p className="text-sm font-body font-medium text-bone">
-                        Drag & drop your resume, or{" "}
-                        <span className="text-gold">browse</span>
+                      <p className="text-sm font-sans text-ink-light">
+                        Drop your resume here, or{" "}
+                        <span className="text-terra font-medium">browse</span>
                       </p>
-                      <p className="text-xs text-noir-500 font-body mt-1">
+                      <p className="text-xs text-ink-muted font-sans mt-1">
                         PDF files only
                       </p>
                     </div>
                   </div>
                 ) : (
-                  <div className="py-4 px-5 rounded-sm bg-noir-850 border border-noir-700 flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 min-w-0">
-                      <FileText className="w-5 h-5 text-gold shrink-0" />
+                  <div className="py-3 px-4 rounded-md bg-parchment-dim border border-border flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <svg className="w-4 h-4 text-terra shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                      </svg>
                       <div className="min-w-0">
-                        <p className="text-sm font-body font-medium text-bone truncate">
+                        <p className="text-sm font-sans font-medium text-ink truncate">
                           {resumeFile.name}
                         </p>
-                        <p className="text-xs text-noir-500 font-body mt-0.5">
+                        <p className="text-xs text-ink-muted font-sans mt-0.5">
                           {formatFileSize(resumeFile.size)}
                         </p>
                       </div>
@@ -339,9 +294,11 @@ export default function Home() {
                     <button
                       type="button"
                       onClick={removeFile}
-                      className="p-1.5 hover:bg-noir-700 rounded-sm text-noir-400 hover:text-bone transition-all duration-200"
+                      className="p-1 hover:bg-border-light rounded text-ink-muted hover:text-ink transition-all duration-200"
                     >
-                      <X className="w-4 h-4" />
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
                     </button>
                   </div>
                 )}
@@ -349,52 +306,41 @@ export default function Home() {
 
               {/* Job Description */}
               <div className="space-y-2">
-                <label className="block text-xs font-body font-medium text-bone-muted tracking-wide uppercase">
-                  Target Job Description <span className="text-gold">*</span>
+                <label className="block text-xs font-sans font-medium text-ink-muted tracking-wide uppercase">
+                  Target Job Description <span className="text-terra">*</span>
                 </label>
-                <div className="relative group">
-                  <div className="absolute top-3.5 left-0 flex items-start pointer-events-none">
-                    <Briefcase className="h-4 w-4 text-noir-500 group-focus-within:text-gold transition-colors duration-300" />
-                  </div>
-                  <textarea
-                    rows={6}
-                    value={jobDescription}
-                    onChange={(e) => setJobDescription(e.target.value)}
-                    className="block w-full pl-7 pr-0 py-3 border-0 border-b border-noir-700 bg-transparent text-bone placeholder-noir-500 focus:outline-none focus:border-gold transition-colors duration-300 font-body text-sm resize-y"
-                    placeholder="Paste the job description, key requirements, roles/responsibilities here..."
-                  />
-                </div>
+                <textarea
+                  rows={5}
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                  className="block w-full py-3 border-0 border-b border-border bg-transparent text-ink placeholder-ink-ghost focus:outline-none focus:border-terra transition-colors duration-300 font-sans text-sm resize-y"
+                  placeholder="Paste the job description, key requirements, roles and responsibilities..."
+                />
               </div>
 
               {/* Self Description */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="block text-xs font-body font-medium text-bone-muted tracking-wide uppercase">
+                  <label className="block text-xs font-sans font-medium text-ink-muted tracking-wide uppercase">
                     Self Description
                   </label>
-                  <span className="text-xs text-noir-500 font-body italic">Optional</span>
+                  <span className="text-xs text-ink-ghost font-sans italic">Optional</span>
                 </div>
-                <div className="relative group">
-                  <div className="absolute top-3.5 left-0 flex items-start pointer-events-none">
-                    <User className="h-4 w-4 text-noir-500 group-focus-within:text-gold transition-colors duration-300" />
-                  </div>
-                  <textarea
-                    rows={3}
-                    value={selfDescription}
-                    onChange={(e) => setSelfDescription(e.target.value)}
-                    className="block w-full pl-7 pr-0 py-3 border-0 border-b border-noir-700 bg-transparent text-bone placeholder-noir-500 focus:outline-none focus:border-gold transition-colors duration-300 font-body text-sm resize-y"
-                    placeholder="Highlight specific career achievements, skills, or focus areas..."
-                  />
-                </div>
+                <textarea
+                  rows={3}
+                  value={selfDescription}
+                  onChange={(e) => setSelfDescription(e.target.value)}
+                  className="block w-full py-3 border-0 border-b border-border bg-transparent text-ink placeholder-ink-ghost focus:outline-none focus:border-terra transition-colors duration-300 font-sans text-sm resize-y"
+                  placeholder="Highlight specific career achievements, skills, or focus areas..."
+                />
               </div>
 
               {/* Submit */}
               <button
                 type="submit"
-                className="w-full flex items-center justify-center gap-3 bg-gold hover:bg-gold-light text-noir-950 font-body font-semibold py-4 px-4 rounded-sm transition-all duration-300 active:scale-[0.98] text-sm tracking-wide uppercase"
+                className="w-full bg-terra hover:bg-terra-hover text-white font-sans font-medium py-3.5 rounded-md transition-all duration-300 active:scale-[0.98] text-sm tracking-wide"
               >
-                <Sparkles className="w-4 h-4" />
-                <span>Generate Preparation Plan</span>
+                Generate Preparation Plan
               </button>
             </form>
           </div>
@@ -403,28 +349,28 @@ export default function Home() {
 
       {/* Loading Overlay */}
       {loading && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-noir-950/95 backdrop-blur-sm">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-parchment/95 backdrop-blur-sm">
           <div className="max-w-md w-full px-6 flex flex-col items-center text-center">
-            {/* Pulsing gold dots */}
+            {/* Pulsing dots */}
             <div className="flex items-center gap-2 mb-8">
-              <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot" />
-              <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot delay-200" />
-              <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot delay-400" />
+              <span className="w-1.5 h-1.5 rounded-full bg-terra animate-pulse-dot" />
+              <span className="w-1.5 h-1.5 rounded-full bg-terra animate-pulse-dot delay-200" />
+              <span className="w-1.5 h-1.5 rounded-full bg-terra animate-pulse-dot delay-400" />
             </div>
 
-            <h3 className="font-display text-2xl font-bold text-bone mb-2">
+            <h3 className="font-serif text-2xl text-ink mb-2">
               Analyzing Profile
             </h3>
 
             {/* Current step */}
             <div className="h-10 flex items-center justify-center mb-8">
-              <p className="text-gold text-sm font-body font-medium animate-pulse">
+              <p className="text-terra text-sm font-sans font-medium animate-pulse">
                 {loadingSteps[loadingStep]}
               </p>
             </div>
 
             {/* Step list */}
-            <div className="w-full bg-noir-900 border border-noir-800 rounded-sm p-5 text-left space-y-3">
+            <div className="w-full bg-surface border border-border rounded-lg p-5 text-left space-y-3">
               {loadingSteps.map((stepMsg, idx) => {
                 const isCompleted = idx < loadingStep;
                 const isActive = idx === loadingStep;
@@ -434,19 +380,24 @@ export default function Home() {
                     className="flex items-center gap-3 transition-opacity duration-300"
                   >
                     {isCompleted ? (
-                      <CheckCircle2 className="w-3.5 h-3.5 text-success shrink-0" />
+                      <svg className="w-3.5 h-3.5 text-sage shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
                     ) : isActive ? (
-                      <Loader2 className="w-3.5 h-3.5 text-gold animate-spin shrink-0" />
+                      <svg className="w-3.5 h-3.5 text-terra animate-spin shrink-0" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
                     ) : (
-                      <div className="w-3.5 h-3.5 rounded-full border border-noir-700 shrink-0" />
+                      <div className="w-3.5 h-3.5 rounded-full border border-border-hover shrink-0" />
                     )}
                     <span
-                      className={`text-xs font-body ${
+                      className={`text-xs font-sans ${
                         isCompleted
-                          ? "text-noir-500 line-through"
+                          ? "text-ink-ghost line-through"
                           : isActive
-                            ? "text-gold font-medium"
-                            : "text-noir-600"
+                            ? "text-terra font-medium"
+                            : "text-ink-faint"
                       }`}
                     >
                       {stepMsg}

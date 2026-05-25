@@ -1,49 +1,52 @@
 @import "tailwindcss";
 
 @theme {
-  /* ─── Noir Editorial Palette ─── */
-  --color-noir-950: #0a0a0b;
-  --color-noir-900: #111113;
-  --color-noir-850: #161618;
-  --color-noir-800: #1c1c1f;
-  --color-noir-700: #27272b;
-  --color-noir-600: #3a3a40;
-  --color-noir-500: #52525a;
-  --color-noir-400: #71717a;
-  --color-noir-300: #a1a1aa;
+  /* ─── Warm Parchment Palette ─── */
+  --color-parchment: #faf8f5;
+  --color-parchment-dim: #f3f0ec;
+  --color-surface: #ffffff;
+  --color-surface-hover: #fefdfb;
 
-  --color-bone: #f5f0eb;
-  --color-bone-dim: #d4cfc9;
-  --color-bone-muted: #9e9a94;
+  --color-ink: #1a1a1a;
+  --color-ink-light: #3d3d3d;
+  --color-ink-muted: #8a8a8a;
+  --color-ink-faint: #b5b0a8;
+  --color-ink-ghost: #d1cdc6;
 
-  --color-gold: #d4a853;
-  --color-gold-light: #e8c97a;
-  --color-gold-dim: #a68535;
-  --color-gold-deep: #8b6f2a;
+  --color-border: #e8e4df;
+  --color-border-light: #f0ece7;
+  --color-border-hover: #d4cfc8;
 
-  --color-danger: #c0392b;
-  --color-danger-soft: #e74c3c;
-  --color-success: #2ecc71;
-  --color-success-soft: #27ae60;
+  --color-terra: #c45d3e;
+  --color-terra-hover: #d4724f;
+  --color-terra-dim: #a84d32;
+  --color-terra-ghost: rgba(196, 93, 62, 0.08);
+
+  --color-sage: #3d7a5f;
+  --color-sage-ghost: rgba(61, 122, 95, 0.1);
+  --color-warm-red: #b44a3d;
+  --color-warm-red-ghost: rgba(180, 74, 61, 0.1);
+  --color-amber: #c48a2a;
+  --color-amber-ghost: rgba(196, 138, 42, 0.1);
 
   /* ─── Typography ─── */
-  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
-  --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
 
   /* ─── Animations ─── */
-  --animate-fade-in: fadeIn 0.6s ease-out both;
-  --animate-fade-in-up: fadeInUp 0.7s ease-out both;
+  --animate-enter: enter 0.4s ease-out both;
+  --animate-enter-up: enterUp 0.5s ease-out both;
   --animate-pulse-dot: pulseDot 1.4s ease-in-out infinite;
 
-  @keyframes fadeIn {
+  @keyframes enter {
     from { opacity: 0; }
     to { opacity: 1; }
   }
 
-  @keyframes fadeInUp {
+  @keyframes enterUp {
     from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(12px);
     }
     to {
       opacity: 1;
@@ -53,7 +56,7 @@
 
   @keyframes pulseDot {
     0%, 80%, 100% {
-      opacity: 0.3;
+      opacity: 0.25;
       transform: scale(0.8);
     }
     40% {
@@ -69,25 +72,6 @@
 @utility delay-300 { animation-delay: 300ms; }
 @utility delay-400 { animation-delay: 400ms; }
 @utility delay-500 { animation-delay: 500ms; }
-@utility delay-600 { animation-delay: 600ms; }
-@utility delay-700 { animation-delay: 700ms; }
-@utility delay-800 { animation-delay: 800ms; }
-
-/* ─── Noise grain overlay ─── */
-@utility grain {
-  position: relative;
-}
-
-@utility grain-overlay {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.03;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 128px;
-}
 
 /* ─── Base layer ─── */
 @layer base {
@@ -97,34 +81,34 @@
   }
 
   body {
-    @apply bg-noir-950 text-bone font-body min-h-screen;
+    @apply bg-parchment text-ink font-sans min-h-screen;
     font-feature-settings: 'kern' 1, 'liga' 1;
     selection {
-      @apply bg-gold/20 text-gold-light;
+      @apply bg-terra-ghost text-terra;
     }
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar — minimal */
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
   }
   ::-webkit-scrollbar-track {
-    @apply bg-noir-900;
+    @apply bg-parchment;
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-noir-600 rounded-full;
+    @apply bg-ink-ghost rounded-full;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-noir-500;
+    @apply bg-ink-faint;
   }
 
-  /* Input autofill override */
+  /* Input autofill override for light theme */
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
   textarea:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0px 1000px #161618 inset !important;
-    -webkit-text-fill-color: #f5f0eb !important;
-    caret-color: #f5f0eb;
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    -webkit-text-fill-color: #1a1a1a !important;
+    caret-color: #1a1a1a;
   }
 }

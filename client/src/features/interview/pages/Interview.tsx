@@ -2,18 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router";
 import { getReportById } from "../api/interview.api";
 import type { InterviewReport } from "../api/interview.api";
-import {
-  ArrowLeft,
-  ChevronDown,
-  ChevronUp,
-  Award,
-  Calendar,
-  CheckSquare,
-  Square,
-  AlertCircle,
-  HelpCircle,
-  Clock,
-} from "lucide-react";
 
 export default function Interview() {
   const { id } = useParams<{ id: string }>();
@@ -75,13 +63,13 @@ export default function Interview() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-noir-950 flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-parchment flex flex-col items-center justify-center">
         <div className="flex items-center gap-2 mb-4">
-          <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot" />
-          <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot delay-200" />
-          <span className="w-2 h-2 rounded-full bg-gold animate-pulse-dot delay-400" />
+          <span className="w-1.5 h-1.5 rounded-full bg-terra animate-pulse-dot" />
+          <span className="w-1.5 h-1.5 rounded-full bg-terra animate-pulse-dot delay-200" />
+          <span className="w-1.5 h-1.5 rounded-full bg-terra animate-pulse-dot delay-400" />
         </div>
-        <p className="text-noir-400 text-sm font-body">
+        <p className="text-ink-muted text-sm font-sans">
           Loading interview report...
         </p>
       </div>
@@ -90,20 +78,21 @@ export default function Interview() {
 
   if (error || !report) {
     return (
-      <div className="min-h-screen bg-noir-950 flex flex-col items-center justify-center p-6 text-center">
-        <AlertCircle className="w-8 h-8 text-danger mb-4" />
-        <h3 className="font-display text-xl font-bold text-bone mb-2">
+      <div className="min-h-screen bg-parchment flex flex-col items-center justify-center p-6 text-center">
+        <svg className="w-6 h-6 text-warm-red mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+        </svg>
+        <h3 className="font-serif text-xl text-ink mb-2">
           Error Loading Report
         </h3>
-        <p className="text-noir-400 text-sm font-body max-w-md mb-6">
+        <p className="text-ink-muted text-sm font-sans max-w-md mb-6">
           {error || "The requested interview prep report could not be found."}
         </p>
         <button
           onClick={() => navigate("/")}
-          className="flex items-center gap-2 px-5 py-2.5 bg-noir-900 border border-noir-700 hover:border-gold/30 text-bone rounded-sm transition-all duration-300 text-sm font-body"
+          className="flex items-center gap-2 px-5 py-2.5 bg-surface border border-border hover:border-terra/30 text-ink rounded-md transition-all duration-300 text-sm font-sans"
         >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to Dashboard</span>
+          ← Back to Dashboard
         </button>
       </div>
     );
@@ -112,19 +101,19 @@ export default function Interview() {
   const score = report.matchScore || 0;
 
   const getScoreColor = (val: number) => {
-    if (val >= 80) return "text-success";
-    if (val >= 60) return "text-gold";
-    return "text-danger-soft";
+    if (val >= 80) return "text-sage";
+    if (val >= 60) return "text-amber";
+    return "text-warm-red";
   };
 
   const getSeverityStyle = (severity: string) => {
     switch (severity.toLowerCase()) {
       case "high":
-        return "bg-danger/10 text-danger-soft border-l-2 border-danger";
+        return "bg-warm-red-ghost border-l-2 border-warm-red";
       case "medium":
-        return "bg-gold/10 text-gold border-l-2 border-gold-dim";
+        return "bg-amber-ghost border-l-2 border-amber";
       default:
-        return "bg-success/10 text-success border-l-2 border-success-soft";
+        return "bg-sage-ghost border-l-2 border-sage";
     }
   };
 
@@ -138,9 +127,9 @@ export default function Interview() {
 
   const getSeverityBarColor = (severity: string) => {
     switch (severity.toLowerCase()) {
-      case "high": return "bg-danger";
-      case "medium": return "bg-gold-dim";
-      default: return "bg-success-soft";
+      case "high": return "bg-warm-red";
+      case "medium": return "bg-amber";
+      default: return "bg-sage";
     }
   };
 
@@ -150,77 +139,55 @@ export default function Interview() {
       : report.behavioralQuestions;
 
   return (
-    <div className="relative min-h-screen bg-noir-950 text-bone flex flex-col overflow-hidden pb-16">
-      {/* Noise grain overlay */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-50" style={{backgroundImage: "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")", backgroundRepeat: "repeat", backgroundSize: "128px"}} />
-
+    <div className="min-h-screen bg-parchment text-ink flex flex-col pb-16">
       {/* Header */}
-      <header className="relative z-10 w-full border-b border-noir-800/80">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
+      <header className="w-full border-b border-border">
+        <div className="max-w-5xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
           <button
             onClick={() => navigate("/")}
-            className="flex items-center gap-2 text-noir-400 hover:text-bone transition-colors duration-300 text-sm font-body"
+            className="text-ink-muted hover:text-ink transition-colors duration-300 text-sm font-sans"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Dashboard</span>
+            ← Dashboard
           </button>
           <div className="flex items-center gap-6">
             <Link
               to="/reports"
-              className="text-noir-400 hover:text-bone text-sm font-body font-medium transition-colors duration-300 relative after:absolute after:bottom-0 after:left-0 after:w-full after:h-px after:bg-gold after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left pb-0.5"
+              className="text-ink-muted hover:text-ink text-sm font-sans font-medium transition-colors duration-300"
             >
               Reports
             </Link>
-            <div className="flex items-center gap-2">
-              <span className="font-display text-lg font-bold text-bone tracking-tight">
-                Intervuo
-              </span>
-              <span className="text-gold text-xs font-body font-semibold tracking-[0.2em] uppercase mt-0.5">
-                AI
-              </span>
-            </div>
+            <h1 className="font-serif text-lg text-ink">Intervuo</h1>
           </div>
         </div>
       </header>
 
       {/* Report Content */}
-      <main className="relative z-10 w-full max-w-5xl mx-auto px-6 lg:px-10 mt-10 space-y-10 flex-1">
+      <main className="w-full max-w-5xl mx-auto px-6 lg:px-10 mt-10 space-y-10 flex-1">
         {/* Overview Banner */}
-        <section className="bg-noir-900 border border-noir-800 rounded-sm relative animate-fade-in-up">
-          {/* Gold top accent */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-gold via-gold/50 to-transparent" />
-
+        <section className="bg-surface border border-border rounded-lg animate-enter-up">
           <div className="p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="space-y-4 text-center md:text-left flex-1">
-              <h1 className="font-display text-2xl md:text-3xl font-bold text-bone tracking-tight leading-tight">
+            <div className="space-y-3 text-center md:text-left flex-1">
+              <h2 className="font-serif text-2xl md:text-3xl text-ink leading-tight">
                 {report.title || "Target Role Analysis"}
-              </h1>
-              <p className="text-noir-400 text-sm font-body font-light max-w-xl">
+              </h2>
+              <p className="text-ink-muted text-sm font-sans font-light max-w-xl">
                 Custom-tailored preparation roadmap based on your profile
                 comparison with the target role.
               </p>
-              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs text-noir-500 font-body pt-1">
-                <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>
-                    {new Date(report.createdAt).toLocaleDateString()}
-                  </span>
-                </span>
-                <span className="text-noir-700">|</span>
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Interview Prep Ready</span>
-                </span>
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 text-xs text-ink-faint font-sans pt-1">
+                <span>{new Date(report.createdAt).toLocaleDateString()}</span>
+                <span className="text-border">|</span>
+                <span>Interview Prep Ready</span>
               </div>
             </div>
 
-            {/* Match Score — Editorial large number, not circular gauge */}
+            {/* Match Score */}
             <div className="flex flex-col items-center gap-1 shrink-0">
-              <span className={`font-display text-6xl md:text-7xl font-bold tracking-tight ${getScoreColor(score)}`}>
+              <span className={`font-serif text-6xl md:text-7xl tracking-tight ${getScoreColor(score)}`}>
                 {score}
               </span>
-              <div className="w-12 h-px bg-gold mt-1" />
-              <span className="text-noir-400 text-[10px] font-body tracking-[0.2em] uppercase font-semibold mt-2">
+              <div className="w-10 h-px bg-terra mt-1" />
+              <span className="text-ink-muted text-[10px] font-sans tracking-[0.15em] uppercase font-medium mt-2">
                 Profile Fit
               </span>
             </div>
@@ -228,7 +195,7 @@ export default function Interview() {
         </section>
 
         {/* Tab Navigation */}
-        <div className="flex border-b border-noir-800 gap-8 animate-fade-in delay-200">
+        <div className="flex border-b border-border gap-8 animate-enter delay-200">
           {[
             {
               id: "questions",
@@ -251,15 +218,15 @@ export default function Interview() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`pb-4 px-1 text-sm font-body font-medium transition-all duration-300 relative border-b-2 cursor-pointer ${
+              className={`pb-4 px-1 text-sm font-sans font-medium transition-all duration-300 border-b-2 cursor-pointer ${
                 activeTab === tab.id
-                  ? "text-bone border-gold"
-                  : "text-noir-400 border-transparent hover:text-bone-dim"
+                  ? "text-ink border-terra"
+                  : "text-ink-muted border-transparent hover:text-ink-light"
               }`}
             >
-              <span className="font-display">{tab.title}</span>
+              <span>{tab.title}</span>
               {tab.count > 0 && (
-                <span className={`ml-2 text-xs font-body font-medium ${activeTab === tab.id ? "text-gold" : "text-noir-500"}`}>
+                <span className={`ml-2 text-xs font-sans ${activeTab === tab.id ? "text-terra" : "text-ink-ghost"}`}>
                   {tab.count}
                 </span>
               )}
@@ -269,19 +236,19 @@ export default function Interview() {
 
         {/* Practice Questions Content */}
         {activeTab === "questions" && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-6 animate-enter">
             {/* Question Type Toggle */}
-            <div className="flex gap-1 bg-noir-900 border border-noir-800 p-1 rounded-sm max-w-xs">
+            <div className="flex gap-1 bg-parchment-dim border border-border p-1 rounded-md max-w-xs">
               <button
                 onClick={() => {
                   setQuestionType("technical");
                   setOpenQuestions([]);
                   setRevealedAnswers([]);
                 }}
-                className={`flex-1 text-center py-2 px-3 rounded-sm text-xs font-body font-medium tracking-wide transition-all duration-300 cursor-pointer ${
+                className={`flex-1 text-center py-2 px-3 rounded text-xs font-sans font-medium tracking-wide transition-all duration-300 cursor-pointer ${
                   questionType === "technical"
-                    ? "bg-gold text-noir-950"
-                    : "text-noir-400 hover:text-bone"
+                    ? "bg-terra text-white"
+                    : "text-ink-muted hover:text-ink"
                 }`}
               >
                 Technical ({report.technicalQuestions?.length || 0})
@@ -292,10 +259,10 @@ export default function Interview() {
                   setOpenQuestions([]);
                   setRevealedAnswers([]);
                 }}
-                className={`flex-1 text-center py-2 px-3 rounded-sm text-xs font-body font-medium tracking-wide transition-all duration-300 cursor-pointer ${
+                className={`flex-1 text-center py-2 px-3 rounded text-xs font-sans font-medium tracking-wide transition-all duration-300 cursor-pointer ${
                   questionType === "behavioral"
-                    ? "bg-gold text-noir-950"
-                    : "text-noir-400 hover:text-bone"
+                    ? "bg-terra text-white"
+                    : "text-ink-muted hover:text-ink"
                 }`}
               >
                 Behavioral ({report.behavioralQuestions?.length || 0})
@@ -311,10 +278,10 @@ export default function Interview() {
                   return (
                     <div
                       key={idx}
-                      className={`bg-noir-900/60 border rounded-sm transition-all duration-300 ${
+                      className={`bg-surface border rounded-lg transition-all duration-300 ${
                         isOpen
-                          ? "border-noir-700 bg-noir-900"
-                          : "border-noir-800 hover:border-noir-700"
+                          ? "border-border-hover"
+                          : "border-border hover:border-border-hover"
                       }`}
                     >
                       {/* Accordion Trigger */}
@@ -323,30 +290,27 @@ export default function Interview() {
                         className="w-full flex items-center justify-between p-5 text-left gap-4 cursor-pointer"
                       >
                         <div className="flex gap-4 items-start">
-                          <span className="font-display text-lg font-bold text-noir-600 shrink-0 mt-0.5 w-8">
+                          <span className="font-serif text-lg text-ink-ghost shrink-0 mt-0.5 w-8">
                             {String(idx + 1).padStart(2, "0")}
                           </span>
-                          <h3 className="text-sm font-body font-medium text-bone leading-relaxed">
+                          <h3 className="text-sm font-sans font-medium text-ink leading-relaxed">
                             {q.question}
                           </h3>
                         </div>
-                        {isOpen ? (
-                          <ChevronUp className="w-4 h-4 text-noir-400 shrink-0" />
-                        ) : (
-                          <ChevronDown className="w-4 h-4 text-noir-400 shrink-0" />
-                        )}
+                        <svg className={`w-4 h-4 text-ink-faint shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                        </svg>
                       </button>
 
                       {/* Accordion Content */}
                       {isOpen && (
-                        <div className="px-5 pb-5 pt-1 border-t border-noir-800 space-y-5">
+                        <div className="px-5 pb-5 pt-1 border-t border-border space-y-5">
                           {/* Intention */}
-                          <div className="py-3 px-4 bg-noir-850 border-l-2 border-gold text-xs">
-                            <h4 className="font-body font-semibold text-gold uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-                              <Award className="w-3.5 h-3.5" />
-                              <span>Interviewer's Intention</span>
+                          <div className="py-3 px-4 bg-parchment-dim border-l-2 border-terra text-xs rounded-r">
+                            <h4 className="font-sans font-medium text-terra uppercase tracking-wider mb-1.5">
+                              Interviewer's Intention
                             </h4>
-                            <p className="text-noir-300 leading-relaxed font-body">
+                            <p className="text-ink-light leading-relaxed font-sans">
                               {q.intention}
                             </p>
                           </div>
@@ -354,28 +318,30 @@ export default function Interview() {
                           {/* Answer Area */}
                           <div className="space-y-3">
                             <div className="flex items-center justify-between">
-                              <h4 className="text-xs font-body font-semibold text-noir-400 uppercase tracking-wider">
+                              <h4 className="text-xs font-sans font-medium text-ink-muted uppercase tracking-wider">
                                 Suggested Response
                               </h4>
                               <button
                                 onClick={(e) => toggleAnswerReveal(e, idx)}
-                                className="text-xs text-gold hover:text-gold-light font-body font-medium transition-colors duration-300 cursor-pointer"
+                                className="text-xs text-terra hover:text-terra-hover font-sans font-medium transition-colors duration-300 cursor-pointer"
                               >
                                 {isAnswerRevealed ? "Hide" : "Reveal"}
                               </button>
                             </div>
 
                             {isAnswerRevealed ? (
-                              <div className="py-4 px-5 bg-noir-850 border-l-2 border-gold/40 text-xs text-noir-300 leading-relaxed font-body">
+                              <div className="py-4 px-5 bg-parchment-dim border-l-2 border-terra/30 text-xs text-ink-light leading-relaxed font-sans rounded-r">
                                 <p className="whitespace-pre-line">{q.answer}</p>
                               </div>
                             ) : (
                               <button
                                 onClick={(e) => toggleAnswerReveal(e, idx)}
-                                className="w-full py-8 border border-dashed border-noir-700 hover:border-gold/30 bg-noir-950/30 hover:bg-gold/5 transition-all duration-300 text-center flex flex-col items-center justify-center gap-2 cursor-pointer rounded-sm"
+                                className="w-full py-8 border border-dashed border-border hover:border-terra/30 bg-parchment-dim/50 hover:bg-terra-ghost transition-all duration-300 text-center flex flex-col items-center justify-center gap-2 cursor-pointer rounded-md"
                               >
-                                <HelpCircle className="w-5 h-5 text-noir-600" />
-                                <span className="text-xs font-body text-noir-400">
+                                <svg className="w-5 h-5 text-ink-ghost" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+                                </svg>
+                                <span className="text-xs font-sans text-ink-muted">
                                   Click to reveal response guide
                                 </span>
                               </button>
@@ -388,8 +354,8 @@ export default function Interview() {
                 })}
               </div>
             ) : (
-              <div className="p-12 text-center border border-dashed border-noir-800 rounded-sm">
-                <p className="text-noir-400 text-sm font-body">
+              <div className="p-12 text-center border border-dashed border-border rounded-lg">
+                <p className="text-ink-muted text-sm font-sans">
                   No practice questions generated.
                 </p>
               </div>
@@ -399,12 +365,12 @@ export default function Interview() {
 
         {/* Skill Gaps Content */}
         {activeTab === "skills" && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-6 animate-enter">
             <div>
-              <h2 className="font-display text-lg font-bold text-bone">
+              <h2 className="font-serif text-lg text-ink">
                 Skill Gap Analysis
               </h2>
-              <p className="text-noir-400 text-sm font-body font-light mt-1 max-w-2xl">
+              <p className="text-ink-muted text-sm font-sans font-light mt-1 max-w-2xl">
                 Key technical and soft skill gaps identified from semantic
                 analysis of your resume against the target role, sorted by severity.
               </p>
@@ -415,13 +381,13 @@ export default function Interview() {
                 {report.skillGaps.map((gap, idx) => (
                   <div
                     key={idx}
-                    className={`p-5 rounded-sm ${getSeverityStyle(gap.severity)} flex items-center justify-between gap-4`}
+                    className={`p-5 rounded-lg ${getSeverityStyle(gap.severity)} flex items-center justify-between gap-4`}
                   >
                     <div className="flex-1 space-y-2">
-                      <h4 className="text-sm font-body font-semibold text-bone">
+                      <h4 className="text-sm font-sans font-medium text-ink">
                         {gap.skill}
                       </h4>
-                      <p className="text-xs text-noir-400 font-body">
+                      <p className="text-xs text-ink-muted font-sans">
                         {gap.severity === "high"
                           ? "Critical — core job requirement. Focus highly."
                           : gap.severity === "medium"
@@ -429,23 +395,23 @@ export default function Interview() {
                             : "Bonus — recommended qualifier."}
                       </p>
                       {/* Severity bar */}
-                      <div className="w-full h-1 bg-noir-800 rounded-full mt-2">
+                      <div className="w-full h-0.5 bg-border rounded-full mt-2">
                         <div className={`h-full rounded-full ${getSeverityBarWidth(gap.severity)} ${getSeverityBarColor(gap.severity)} transition-all duration-500`} />
                       </div>
                     </div>
-                    <span className="text-[10px] font-body font-bold uppercase tracking-[0.2em] shrink-0">
+                    <span className="text-[10px] font-sans font-semibold uppercase tracking-[0.15em] shrink-0 text-ink-muted">
                       {gap.severity}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="p-10 text-center bg-noir-900 border border-noir-800 rounded-sm">
-                <div className="w-10 h-px bg-gold mx-auto mb-4" />
-                <h4 className="text-sm font-display font-bold text-bone">
+              <div className="p-10 text-center bg-surface border border-border rounded-lg">
+                <div className="w-8 h-px bg-terra mx-auto mb-4" />
+                <h4 className="text-sm font-serif text-ink">
                   Outstanding Alignment
                 </h4>
-                <p className="text-noir-400 text-xs font-body mt-1">
+                <p className="text-ink-muted text-xs font-sans mt-1">
                   No significant skill gaps detected for this role.
                 </p>
               </div>
@@ -455,38 +421,38 @@ export default function Interview() {
 
         {/* Preparation Plan Content */}
         {activeTab === "plan" && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-6 animate-enter">
             <div>
-              <h2 className="font-display text-lg font-bold text-bone">
+              <h2 className="font-serif text-lg text-ink">
                 Preparation Timeline
               </h2>
-              <p className="text-noir-400 text-sm font-body font-light mt-1">
+              <p className="text-ink-muted text-sm font-sans font-light mt-1">
                 A day-by-day training roadmap. Check off tasks as you prepare.
               </p>
             </div>
 
             {report.preparationPlan && report.preparationPlan.length > 0 ? (
-              <div className="relative border-l border-noir-800 ml-5 pl-10 space-y-10 py-2">
+              <div className="relative border-l border-border ml-5 pl-10 space-y-10 py-2">
                 {report.preparationPlan.map((dayData, dayIdx) => (
                   <div key={dayIdx} className="relative group">
                     {/* Timeline node */}
-                    <div className="absolute -left-[2.85rem] top-0 w-6 h-6 rounded-full bg-noir-950 border-2 border-gold flex items-center justify-center text-[10px] font-display font-bold text-gold group-hover:bg-gold group-hover:text-noir-950 transition-all duration-300">
+                    <div className="absolute -left-[2.85rem] top-0 w-6 h-6 rounded-full bg-parchment border-2 border-terra flex items-center justify-center text-[10px] font-sans font-semibold text-terra group-hover:bg-terra group-hover:text-white transition-all duration-300">
                       {dayData.day}
                     </div>
 
                     {/* Day Card */}
-                    <div className="bg-noir-900/50 hover:bg-noir-900 border border-noir-800 hover:border-noir-700 rounded-sm p-6 transition-all duration-300 space-y-4">
+                    <div className="bg-surface hover:bg-surface-hover border border-border hover:border-border-hover rounded-lg p-6 transition-all duration-300 space-y-4">
                       <div>
-                        <span className="text-[10px] text-gold font-body font-semibold uppercase tracking-[0.2em]">
+                        <span className="text-[10px] text-terra font-sans font-medium uppercase tracking-[0.15em]">
                           Day {dayData.day}
                         </span>
-                        <h3 className="font-display text-base font-bold text-bone mt-1">
+                        <h3 className="font-serif text-base text-ink mt-1">
                           {dayData.focus}
                         </h3>
                       </div>
 
                       {/* Checklist */}
-                      <div className="space-y-2">
+                      <div className="space-y-1.5">
                         {dayData.tasks?.map((task, taskIdx) => {
                           const taskKey = `${dayIdx}-${taskIdx}`;
                           const isDone = completedTasks.includes(taskKey);
@@ -494,18 +460,20 @@ export default function Interview() {
                             <button
                               key={taskIdx}
                               onClick={() => toggleTask(taskKey)}
-                              className="w-full flex items-start gap-3 py-2 px-2 hover:bg-noir-850 rounded-sm text-left transition-all duration-200 cursor-pointer group/item"
+                              className="w-full flex items-start gap-3 py-2 px-2 hover:bg-parchment-dim rounded text-left transition-all duration-200 cursor-pointer group/item"
                             >
                               {isDone ? (
-                                <CheckSquare className="w-4 h-4 text-gold mt-0.5 shrink-0" />
+                                <svg className="w-4 h-4 text-terra mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
                               ) : (
-                                <Square className="w-4 h-4 text-noir-600 group-hover/item:text-noir-400 mt-0.5 shrink-0" />
+                                <div className="w-4 h-4 rounded border border-border-hover group-hover/item:border-ink-faint mt-0.5 shrink-0 transition-colors" />
                               )}
                               <span
-                                className={`text-xs font-body ${
+                                className={`text-xs font-sans ${
                                   isDone
-                                    ? "text-noir-500 line-through"
-                                    : "text-noir-300"
+                                    ? "text-ink-ghost line-through"
+                                    : "text-ink-light"
                                 }`}
                               >
                                 {task}
@@ -519,8 +487,8 @@ export default function Interview() {
                 ))}
               </div>
             ) : (
-              <div className="p-12 text-center border border-dashed border-noir-800 rounded-sm">
-                <p className="text-noir-400 text-sm font-body">
+              <div className="p-12 text-center border border-dashed border-border rounded-lg">
+                <p className="text-ink-muted text-sm font-sans">
                   No preparation timeline generated.
                 </p>
               </div>
