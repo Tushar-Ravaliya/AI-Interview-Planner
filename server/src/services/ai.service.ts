@@ -101,10 +101,55 @@ export const generateInterviewReport = async ({
   selfDescription: string;
   jobDescription: string;
 }) => {
-  const prompt = `Generate an interview report for a candidate with the following details:
-                        Resume: ${resume}
-                        Self Description: ${selfDescription}
-                        Job Description: ${jobDescription}
+  const prompt = `You are a world-class Technical Recruiter and Expert Interview Coach.
+Your task is to generate a comprehensive, highly personalized, and realistic interview preparation report for a candidate applying to a target job role.
+
+Evaluate the candidate based on the following details:
+- **Resume Content**:
+"""
+${resume}
+"""
+- **Candidate's Self-Description (Motivation, current context, expectations)**:
+"""
+${selfDescription}
+"""
+- **Target Job Description**:
+"""
+${jobDescription}
+"""
+
+Please adhere strictly to the following instructions for each schema field:
+
+1. **title**: Extract the exact target job title from the Job Description. If it is ambiguous, infer the most accurate and common professional title (e.g. "Senior Full Stack Engineer").
+
+2. **matchScore**: Calculate a realistic and objective score between 0 and 100 representing how well the candidate fits the target role.
+   - 90-100: Candidate is an exceptionally strong match, possessing nearly all core and secondary skills, and relevant experience.
+   - 70-89: Good match but has some clear skill gaps or experience mismatches.
+   - 50-69: Moderate match with significant skill gaps or lesser experience.
+   - <50: Weak match.
+   Be honest and critical; do not default to generic high scores.
+
+3. **technicalQuestions**: Generate 5 to 8 challenging and highly relevant technical questions.
+   - Tailor the questions to both the Job Description requirements (e.g. core technologies, architecture, patterns) and the candidate's actual experience level.
+   - **intention**: For each question, explain the exact engineering logic, system/concept depth, or problem-solving capability the interviewer is trying to evaluate (e.g., "To test the candidate's understanding of database index behavior under write-heavy loads").
+   - **answer**: Provide a highly structured, comprehensive, and clear guide on how the candidate should answer. Mention key concepts to touch upon, step-by-step reasoning/approaches, important trade-offs, and brief outline/hints of the code or architecture to explain. Do not write generic or short answers.
+
+4. **behavioralQuestions**: Generate 3 to 5 behavioral questions.
+   - Focus on leadership, conflict resolution, ownership, prioritization, dealing with ambiguity, or teamwork based on the seniority and style of the role.
+   - **intention**: Explain the underlying soft skill, psychological trait, or cultural alignment being assessed.
+   - **answer**: Provide a structured guide on how to frame the response using the STAR method (Situation, Task, Action, Result), detailing what kind of story from the candidate's background would fit best.
+
+5. **skillGaps**: Analyze the target Job Description against the candidate's Resume and Self-Description to identify specific skills, technologies, methodologies, or experience levels that are missing or weak.
+   - **skill**: Clearly name the missing or weak skill (e.g. "Kubernetes & Container Orchestration", "System Design for High-Throughput Pipelines").
+   - **severity**: Assign a severity level:
+     - "high": Crucial for the job (e.g. core language/framework, essential experience).
+     - "medium": Highly valued and expected, but might be learned on the job.
+     - "low": Nice-to-have, soft skill, or secondary tools.
+
+6. **preparationPlan**: Develop a highly actionable, structured, day-by-day preparation roadmap (usually 5 to 7 days, sequential starting from day 1).
+   - **day**: Sequential day number starting from 1.
+   - **focus**: A clear, specific topic/domain for that day (e.g., "Day 1: Microservices Architecture & System Design Gaps").
+   - **tasks**: Provide 3 to 5 highly specific, actionable, and concrete preparation tasks for that day (e.g., "Read up on Kafka partition keys and write-ahead logs", "Implement a mock rate limiter locally to practice token bucket algorithm", "Practice describing your most recent conflict using the STAR method"). Do not use generic tasks like "Study system design" or "Practice coding".
 `;
 
   const response = await genAI.models.generateContent({
