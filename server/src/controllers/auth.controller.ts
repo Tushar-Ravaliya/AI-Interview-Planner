@@ -58,14 +58,11 @@ const signIn = async (req: any, res: any) => {
   try {
     const { email, password } = req.body;
     const user = await UserModel.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+    const isMatch = user
+      ? await bcrypt.compare(password, user.password)
+      : false;
+    if (!user || !isMatch) {
+      return res.status(401).json({ message: "Invalid email or password" });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, {
@@ -92,7 +89,9 @@ const signIn = async (req: any, res: any) => {
 const signOut = async (req: any, res: any) => {
   try {
     const token = req.cookies.token;
-    await BlacklistModel.create({ token });
+    if (token) {
+      await BlacklistModel.create({ token });
+    }
     const isProduction = process.env.NODE_ENV === "production";
     res.clearCookie("token", {
       httpOnly: true,
