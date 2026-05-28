@@ -10,7 +10,7 @@ const interviewReportSchema = z.object({
   matchScore: z
     .number()
     .describe(
-      "A score between 0 and 100 indicating how well the candidate's profile matches the job describe",
+      "A score between 0 and 100 indicating how well the candidate's profile matches the job description",
     ),
   technicalQuestions: z
     .array(
@@ -36,14 +36,18 @@ const interviewReportSchema = z.object({
       z.object({
         question: z
           .string()
-          .describe("The technical question can be asked in the interview"),
+          .describe(
+            "The behavioral question that can be asked in the interview",
+          ),
         intention: z
           .string()
-          .describe("The intention of interviewer behind asking this question"),
+          .describe(
+            "The underlying soft skill, psychological trait, or cultural alignment being assessed",
+          ),
         answer: z
           .string()
           .describe(
-            "How to answer this question, what points to cover, what approach to take etc.",
+            "A detailed guide on how to frame the response using the STAR method, detailing what kind of story or experience from the candidate's background fits best",
           ),
       }),
     )
@@ -91,6 +95,8 @@ const interviewReportSchema = z.object({
       "The title of the job for which the interview report is generated",
     ),
 });
+
+export type InterviewReport = z.infer<typeof interviewReportSchema>;
 
 export const generateInterviewReport = async ({
   resume,
@@ -153,7 +159,7 @@ Please adhere strictly to the following instructions for each schema field:
 `;
 
   const response = await genAI.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-3.5-flash",
     contents: prompt,
     config: {
       responseMimeType: "application/json",
@@ -165,5 +171,6 @@ Please adhere strictly to the following instructions for each schema field:
     throw new Error("AI model returned an empty response");
   }
 
-  return JSON.parse(response.text);
+  const parsedData = JSON.parse(response.text);
+  return interviewReportSchema.parse(parsedData);
 };

@@ -1,28 +1,21 @@
-# render.yaml — place this in your project ROOT
-# Render will auto-detect and set up your services
-
 services:
-  # ──────────────────────────────────────────
-  # Backend: Bun + Express (Docker)
-  # ──────────────────────────────────────────
   - type: web
     name: my-app-server
     runtime: docker
     dockerfilePath: ./server/Dockerfile
     dockerContext: ./server
     plan: free
-    healthCheckPath: /health # add a GET /health route in Express (see notes)
+    healthCheckPath: /health
     envVars:
       - key: PORT
         value: 3000
       - key: NODE_ENV
         value: production
       - key: MONGO_URI
-        sync: false # set manually in Render dashboard
+        sync: false
       - key: JWT_SECRET
-        sync: false # set manually in Render dashboard
+        sync: false
       - key: GEMINI_API_KEY
-        sync: false # for @google/genai — set manually
+        sync: false
       - key: CLIENT_URL
-        sync: false # your Vercel URL e.g. https://your-app.vercel.app
-
+        sync: false
